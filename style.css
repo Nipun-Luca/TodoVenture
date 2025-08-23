@@ -17,65 +17,37 @@ h1 {
   z-index: 10;
 }
 
-input, button {
+input, textarea, button {
   padding: 10px;
   border: none;
   border-radius: 6px;
   margin: 5px;
   position: relative;
   z-index: 10;
+  font-family: monospace;
 }
 
-#new-task {
+#new-task, #task-desc {
   width: 80%;
-  font-family: monospace;
-  border: black 1px solid;
+  border: 1px solid black;
 }
 
 #task-desc {
-    width: 80%;
-    max-width: 80%;
-    font-family: monospace;
-    padding: 10px;
-    border: black 1px solid;
-    border-radius: 6px;
-    margin: 5px;
-    position: relative;
-    z-index: 10;
+  max-width: 80%;
 }
 
-#task-date {
-    width: fit-content;
-    font-family: monospace;
-    padding: 10px;
-    border: black 1px solid;
-    border-radius: 6px;
-    margin: 5px;
-    position: relative;
-    z-index: 10;
-}
-
-#task-priority {
-    width: fit-content;
-    font-family: monospace;
-    padding: 10px;
-    border: black 1px solid;
-    border-radius: 6px;
-    margin: 5px;
-    position: relative;
-    z-index: 10;
-}
-
-#add-btn {
-  background: #4caf50;
-  color: white;
-  cursor: pointer;
+#task-date, #task-priority {
+  width: fit-content;
+  border: 1px solid black;
+  padding: 10px;
+  border-radius: 6px;
+  margin: 5px;
 }
 
 ul {
   list-style: none;
   padding-left: 0;
-  margin-top: 0px;
+  margin-top: 0;
   position: relative;
   z-index: 10;
 }
@@ -95,30 +67,24 @@ li.completed span {
   opacity: 0.7;
 }
 
-.btn-container {
-    flex: none;
-}
-
-button.delete-btn {
-  background: red;
-  color: white;
+button.edit-btn, button.delete-btn {
   padding: 5px 8px;
   border-radius: 6px;
   cursor: pointer;
   z-index: 10;
+  border: none;
+  background: none;
 }
 
-button.edit-btn {
-  background: #2196f3;
-  color: white;
+.edit-btn, .delete-btn {
   padding: 5px 8px;
   border-radius: 6px;
   cursor: pointer;
-  margin-right: 5px;
-  z-index: 10;
+  border: none;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* Theme Toggle Button */
+/* Theme Toggle */
 .theme-toggle {
   position: absolute;
   top: 15px;
@@ -161,10 +127,38 @@ button.edit-btn {
   background: rgba(255, 255, 255, 0.8);
 }
 
+.day-theme .sidebar {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.day-theme .modal-content {
+  background: #fff;
+}
+
+.day-theme input, .day-theme textarea {
+  border: 1px solid black;
+  color: #000;
+}
+
+.day-theme .edit-btn {
+  background: #2196f3;
+  color: white;
+}
+.day-theme .edit-btn:hover {
+  background: #1976d2;
+}
+
+.day-theme .delete-btn {
+  background: #e53935;
+  color: white;
+}
+.day-theme .delete-btn:hover {
+  background: #c62828;
+}
+
 /* --- Night Theme --- */
 .night-theme {
-  /*background: linear-gradient(to bottom, #00112b, #001f4d); /* darker top, lighter bottom */
-  background: linear-gradient(to bottom, #374d6d, #000a18); /* lighter top, darket bottom */
+  background: linear-gradient(to bottom, #374d6d, #000a18);
   color: #eee;
 }
 
@@ -173,7 +167,36 @@ button.edit-btn {
   color: #eee;
 }
 
-/* Sky container */
+.night-theme .sidebar {
+  background: rgba(50, 50, 70, 0.9);
+}
+
+.night-theme .modal-content {
+  background: #2a2a40;
+}
+
+.night-theme input, .night-theme textarea {
+  border: 1px solid #ccc;
+  color: #eee;
+}
+
+.night-theme .edit-btn {
+  background: #4dabf5;
+  color: #fff;
+}
+.night-theme .edit-btn:hover {
+  background: #1e88e5;
+}
+
+.night-theme .delete-btn {
+  background: #ef5350;
+  color: #fff;
+}
+.night-theme .delete-btn:hover {
+  background: #e53935;
+}
+
+/* Sky elements */
 .sky {
   position: absolute;
   top: 0; left: 0;
@@ -183,7 +206,6 @@ button.edit-btn {
   z-index: 0; 
 }
 
-/* Sun & Moon */
 .sun, .moon {
   width: 80px;
   height: 80px;
@@ -204,7 +226,6 @@ button.edit-btn {
   opacity: 0;
 }
 
-/* Clouds */
 .cloud {
   position: absolute;
   background: #fff;
@@ -214,7 +235,6 @@ button.edit-btn {
   z-index: 0;
 }
 
-/* Puff bumps */
 .cloud::before {
   content: '';
   width: 35px;
@@ -237,7 +257,6 @@ button.edit-btn {
   border-radius: 50%;
 }
 
-/* Different cloud sizes and positions */
 .cloud1 { width: 120px; height: 50px; top: 120px; left: -150px; animation-delay: 0s; }
 .cloud2 { width: 150px; height: 60px; top: 180px; left: -200px; animation-delay: 15s; }
 .cloud3 { width: 100px; height: 40px; top: 140px; left: -180px; animation-delay: 30s; }
@@ -248,13 +267,8 @@ button.edit-btn {
   100% { transform: translateX(120vw); }
 }
 
+.night-theme .cloud { display: none; }
 
-/* Hide clouds at night */
-.night-theme .cloud {
-  display: none;
-}
-
-/* Twinkling stars */
 .star {
   position: absolute;
   width: 2px;
@@ -272,67 +286,16 @@ button.edit-btn {
   100% { opacity: 0.2; transform: scale(1); }
 }
 
-/* Show sun/moon depending on theme */
 .day-theme .sun { opacity: 1; }
 .day-theme .moon { opacity: 0; }
 .night-theme .sun { opacity: 0; }
 .night-theme .moon { opacity: 1; }
 
-/* Modal Styling */
-.modal {
-  display: none; 
-  position: fixed;
-  z-index: 20; 
-  left: 0; top: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.5);
-}
-.modal-content {
-    display: flex;
-    flex-direction: column;
-  background: white;
-  margin: 10% auto;
-  padding: 20px;
-  border-radius: 10px;
-  width: 80%;
-  max-width: 35%;
-  position: relative;
-  z-index: 21;
-}
-.modal-content input {
-  width: 100%;
-  margin-bottom: 10px;
-}
-
-
-.modal-buttons {
-  margin-top: 10px;
-  display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-}
-
-#openAddModal {
-  margin-left: 20px;
-  padding: 8px 14px;
-  border: none;
-  border-radius: 6px;
-  background: #4CAF50;
-  color: white;
-  cursor: pointer;
-}
-#openAddModal:hover {
-  background: #45a049;
-}
-
-
-
-
-/* Container for sidebar + task list */
+/* Container */
 .main-container {
   display: flex;
-  height: calc(100vh - 100px); /* full height minus header margin */
-  margin-top: 60px; /* space for h1 */
+  height: calc(100vh - 100px);
+  margin-top: 60px;
   z-index: 10;
   position: relative;
 }
@@ -340,21 +303,27 @@ button.edit-btn {
 /* Sidebar */
 .sidebar {
   width: 200px;
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.8);
+  color: #333;
   padding: 20px;
   border-radius: 8px;
   margin-left: 20px;
   flex-shrink: 0;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-.sidebar h2 {
-  margin-top: 0;
-  font-size: 18px;
+.sidebar li {
+    color: #333;
 }
 
-.sidebar ul {
-  padding-left: 0;
-  list-style: none;
+.day-theme .sidebar {
+  background: rgba(255, 255, 255, 0.8);
+  color: #333;
+}
+
+.night-theme .sidebar {
+  background: rgba(255, 255, 255, 0.8);
+  color: #333;
 }
 
 .sidebar li {
@@ -362,29 +331,54 @@ button.edit-btn {
   padding: 6px 10px;
   border-radius: 6px;
   cursor: pointer;
-  background: rgba(200, 200, 200, 0.2);
-  transition: background 0.2s;
+  background: transparent;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
-.sidebar li:hover, .sidebar li.active {
-  background: #4caf50;
+.day-theme .sidebar li:hover,
+.day-theme .sidebar li.active {
+  background: #0077b6;   /* blue */
   color: white;
 }
 
-/* Task List Section */
+.night-theme .sidebar li:hover,
+.night-theme .sidebar li.active {
+  background: #219ebc;   /* lighter aqua blue for night */
+  color: #fff;
+}
+
+#add-project-btn {
+  margin-top: 15px;
+  width: 100%;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 6px;
+  background: #6a4c93;   /* indigo-violet */
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+#add-project-btn:hover {
+  background: #5a3c80;   /* deeper violet */
+  transform: scale(1.05);
+}
+
+/* Task Section */
 .task-section {
   flex: 1;
   margin-left: 20px;
   padding-right: 20px;
   overflow-y: auto;
 }
- .task-right {
+
+.task-right {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-/* Priority colored dots */
 .priority-dot {
   display: inline-block;
   width: 12px;
@@ -397,22 +391,56 @@ button.edit-btn {
   border: #eee 1px solid;
 }
 
-.priority-dot.low { background: limegreen; }
+.priority-dot.low { background: #28a745; }
 .priority-dot.medium { background: gold; }
-.priority-dot.high { background: red; }
+.priority-dot.high { background: #e53935; }
 
 .due-date {
   font-size: 0.85em;
 }
 
-/* Adjust buttons to align nicely */
-.edit-btn, .delete-btn {
-  background: none;
-  border: none;
+/* Buttons */
+#add-btn, #openAddModal {
+  background: #4aa600;
+  font-weight: bold;
+  color: white;
   cursor: pointer;
-  padding: 2px;
+  border-radius: 6px;
+  padding: 8px 14px;
+    margin-left: 20px;
+  border: none;
 }
 
-.edit-btn svg, .delete-btn svg {
-  display: block;
+#add-btn:hover, #openAddModal:hover {
+  background: #00a6a3;
+}
+
+.night-theme #openAddModal {
+  background: #fb8500;   /* bright orange pop */
+}
+
+.night-theme #openAddModal:hover {
+  background: #ff6700;
+}
+
+/* Modals */
+.modal {
+  display: none; 
+  position: fixed;
+  z-index: 20; 
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 35%;
+  position: relative;
+  z-index: 21;
 }
