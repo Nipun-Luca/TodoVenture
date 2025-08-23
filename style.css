@@ -257,10 +257,11 @@ button.edit-btn, button.delete-btn {
   border-radius: 50%;
 }
 
-.cloud1 { width: 120px; height: 50px; top: 120px; left: -150px; animation-delay: 0s; }
-.cloud2 { width: 150px; height: 60px; top: 180px; left: -200px; animation-delay: 15s; }
-.cloud3 { width: 100px; height: 40px; top: 140px; left: -180px; animation-delay: 30s; }
-.cloud4 { width: 130px; height: 50px; top: 220px; left: -220px; animation-delay: 45s; }
+.cloud1 { width: 120px; height: 50px; top: 120px; left: -150px; animation-delay: -5s; }
+.cloud2 { width: 150px; height: 60px; top: 180px; left: -200px; animation-delay: -20s; }
+.cloud3 { width: 100px; height: 40px; top: 140px; left: -180px; animation-delay: -35s; }
+.cloud4 { width: 130px; height: 50px; top: 220px; left: -220px; animation-delay: -50s; }
+
 
 @keyframes float {
   0% { transform: translateX(0); }
@@ -337,13 +338,13 @@ button.edit-btn, button.delete-btn {
 
 .day-theme .sidebar li:hover,
 .day-theme .sidebar li.active {
-  background: #0077b6;   /* blue */
+  background: #0077b6;
   color: white;
 }
 
 .night-theme .sidebar li:hover,
 .night-theme .sidebar li.active {
-  background: #219ebc;   /* lighter aqua blue for night */
+  background: #219ebc;
   color: #fff;
 }
 
@@ -353,7 +354,7 @@ button.edit-btn, button.delete-btn {
   padding: 10px 14px;
   border: none;
   border-radius: 6px;
-  background: #6a4c93;   /* indigo-violet */
+  background: #6a4c93;
   color: white;
   cursor: pointer;
   font-weight: bold;
@@ -361,42 +362,90 @@ button.edit-btn, button.delete-btn {
 }
 
 #add-project-btn:hover {
-  background: #5a3c80;   /* deeper violet */
+  background: #5a3c80;
   transform: scale(1.05);
 }
 
 /* Task Section */
-.task-section {
+.task-check {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  accent-color: #28a745;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.night-theme .task-checkbox {
+  accent-color: #90ee90;
+}
+
+.task-checkbox:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+}
+
+.task-section{
   flex: 1;
   margin-left: 20px;
   padding-right: 20px;
   overflow-y: auto;
 }
 
-.task-right {
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 6px 20px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  transition: transform 0.15s ease, background 0.3s ease;
+  cursor: pointer;
+}
+
+.task-item:hover {
+  transform: scale(1.02);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.night-theme .task-item:hover {
+  transform: scale(1.02);
+  background: rgba(70, 70, 90, 0.9);
+}
+
+.task-left {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.priority-dot {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  border: black 1px solid;
+.task-title {
+  font-size: 1em;
+  flex: 1;
+}
+.task-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.night-theme .priority-dot {
-  border: #eee 1px solid;
-}
-
-.priority-dot.low { background: #28a745; }
-.priority-dot.medium { background: gold; }
-.priority-dot.high { background: #e53935; }
-
-.due-date {
+/* Priority labels */
+.priority {
+  font-weight: bold;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 6px;
   font-size: 0.85em;
+}
+
+.priority.low { background: limegreen; }
+.priority.medium { background: goldenrod; }
+.priority.high { background: crimson; }
+
+/* Completed tasks */
+.task-item.completed .task-title {
+  text-decoration: line-through;
+  opacity: 0.7;
 }
 
 /* Buttons */
@@ -411,12 +460,16 @@ button.edit-btn, button.delete-btn {
   border: none;
 }
 
+#add-btn {
+    margin: 5px;
+}
+
 #add-btn:hover, #openAddModal:hover {
   background: #00a6a3;
 }
 
 .night-theme #openAddModal {
-  background: #fb8500;   /* bright orange pop */
+  background: #fb8500;
 }
 
 .night-theme #openAddModal:hover {

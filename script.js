@@ -56,63 +56,73 @@ addProjectBtn.addEventListener('click', () => {
 // --- Render Tasks ---
 function renderTasks() {
   taskList.innerHTML = '';
-  tasks.filter(t => t.project === currentProject).forEach((task, index) => {
-    const li = document.createElement('li');
-    if (task.completed) li.classList.add('completed');
+  tasks
+    .filter(t => t.project === currentProject)
+    .forEach((task, index) => {
+      const li = document.createElement('li');
+      li.className = 'task-item';
+      if (task.completed) li.classList.add('completed');
 
-    // Left section: title + description
-    const textContainer = document.createElement('div');
-    textContainer.className = 'task-left';
+      // Left: checkbox + title
+      const leftContainer = document.createElement('div');
+      leftContainer.className = 'task-left';
 
-    const title = document.createElement('span');
-    title.className = 'task-title';
-    title.textContent = task.text;
-    title.addEventListener('click', () => toggleTask(index));
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.className = 'task-check';
+      checkbox.checked = task.completed;
+      checkbox.addEventListener('click', (e) => {
+        e.stopPropagation(); // don’t trigger modal when clicking checkbox
+        toggleTask(index);
+      });
 
-    textContainer.appendChild(title);
+      const title = document.createElement('span');
+      title.className = 'task-title';
+      title.textContent = task.text;
 
-    // Right section container
-    const rightContainer = document.createElement('div');
-    rightContainer.className = 'task-right';
+      leftContainer.appendChild(checkbox);
+      leftContainer.appendChild(title);
 
-    // Due date
-    if (task.dueDate) {
-      const dueDate = document.createElement('span');
-      dueDate.className = 'due-date';
-      dueDate.textContent = task.dueDate;
-      rightContainer.appendChild(dueDate);
-    }
+      // Right: date + priority
+      const rightContainer = document.createElement('div');
+      rightContainer.className = 'task-right';
 
-    // Priority dot
-    const priorityDot = document.createElement('span');
-    priorityDot.className = `priority-dot ${task.priority}`;
-    priorityDot.title = task.priority.charAt(0).toUpperCase() + task.priority.slice(1);
-    rightContainer.appendChild(priorityDot);
+      if (task.dueDate) {
+        const dueDate = document.createElement('span');
+        dueDate.className = 'due-date';
+        dueDate.textContent = task.dueDate;
+        rightContainer.appendChild(dueDate);
+      }
 
-    // Edit button SVG
-    const editBtn = document.createElement('button');
-    editBtn.className = 'edit-btn';
-    editBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-      <path d="M15.502 1.94a.5.5 0 0 1 0 .706l-1.793 1.793-2.121-2.121L13.38.525a.5.5 0 0 1 .707 0l1.415 1.415zM1 13.5V16h2.5l9.354-9.354-2.121-2.121L1 13.5z"/>
-    </svg>`;
-    editBtn.addEventListener('click', () => openEditModal(index));
-    rightContainer.appendChild(editBtn);
+      const priority = document.createElement('span');
+      priority.className = `priority ${task.priority}`;
+      priority.textContent =
+        task.priority.charAt(0).toUpperCase() + task.priority.slice(1);
+      rightContainer.appendChild(priority);
 
-    // Delete button SVG
-    const deleteBtn = document.createElement('button');
-    deleteBtn.className = 'delete-btn';
-    deleteBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-      <path d="M5.5 5.5a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0v-6a.5.5 0 0 1 .5-.5zm3 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0v-6a.5.5 0 0 1 .5-.5z"/>
-      <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1 0-2H5h6h1.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118z"/>
-    </svg>`;
-    deleteBtn.addEventListener('click', () => deleteTask(index));
-    rightContainer.appendChild(deleteBtn);
+      // Delete button
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'delete-btn';
+      deleteBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M5.5 5.5a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0v-6a.5.5 0 0 1 .5-.5zm3 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0v-6a.5.5 0 0 1 .5-.5z"/>
+        <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1 0-2H5h6h1.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118z"/>
+      </svg>`;
+      deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // don’t open modal when deleting
+        deleteTask(index);
+      });
+      rightContainer.appendChild(deleteBtn);
 
-    li.appendChild(textContainer);
-    li.appendChild(rightContainer);
-    taskList.appendChild(li);
-  });
+      li.appendChild(leftContainer);
+      li.appendChild(rightContainer);
+
+      // Clicking anywhere on li (except checkbox/delete) opens modal
+      li.addEventListener('click', () => openEditModal(index));
+
+      taskList.appendChild(li);
+    });
 }
+
 
 // --- Add Task Modal ---
 openAddModalBtn.addEventListener('click', () => {
