@@ -13,29 +13,54 @@
 
     <h1>To-Do List</h1>
 
-    <!-- Add Task Button -->
-    <button id="openAddModal">➕ Add Task</button>
+    <div class="main-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>Projects</h2>
+            <ul id="project-list">
+                <li class="active" data-project="General">General</li>
+            </ul>
+            <button id="add-project-btn">➕ New Project</button>
+        </div>
 
-    <!-- Add Task Modal -->
-    <div id="addModal" class="modal">
-        <div class="modal-content">
-            <h2>New Task</h2>
-            <input type="text" id="new-task" placeholder="Enter a new task">
-            <input type="date" id="task-date">
-            <select id="task-priority">
-            <option value="low">Low</option>
-            <option value="medium" selected>Medium</option>
-            <option value="high">High</option>
-            </select>
-            <div class="modal-buttons">
-            <button id="add-btn">Add</button>
-            <button id="cancel-add">Cancel</button>
+        <!-- Task List Section -->
+        <div class="task-section">
+            <!-- Add Task Button -->
+            <button id="openAddModal">➕ Add Task</button>
+
+            <!-- Add Task Modal -->
+            <div id="addModal" class="modal">
+                <div class="modal-content">
+                    <h2>New Task</h2>
+                    <input type="text" id="new-task" placeholder="Enter a task title">
+                    <textarea id="task-desc" placeholder="Description (optional)"></textarea>
+                    <input type="date" id="task-date">
+                    <select id="task-priority">
+                        <option value="low" selected>Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                    <div class="modal-buttons">
+                        <button id="add-btn">Add</button>
+                        <button id="cancel-add">Cancel</button>
+                    </div>
+                </div>
             </div>
+
+            <!-- Task List -->
+            <ul id="task-list"></ul>
         </div>
     </div>
 
-  
-    <ul id="task-list"></ul>
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h2>Edit Task</h2>
+            <input type="text" id="edit-input">
+            <button id="save-edit">Save</button>
+            <button id="cancel-edit">Cancel</button>
+        </div>
+    </div>
 
     <!-- Decorative elements -->
     <div class="sky">
@@ -45,18 +70,9 @@
         <div class="cloud cloud2"></div>
         <div class="cloud cloud3"></div>
         <div class="cloud cloud4"></div>
-        </div>
-
-    <!-- Edit Modal -->
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-        <h2>Edit Task</h2>
-        <input type="text" id="edit-input">
-        <button id="save-edit">Save</button>
-        <button id="cancel-edit">Cancel</button>
-        </div>
     </div>
 
     <script src="script.js"></script>
 </body>
+
 </html>

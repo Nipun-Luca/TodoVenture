@@ -27,8 +27,43 @@ input, button {
 }
 
 #new-task {
-  width: 65%;
-  margin: 20px;
+  width: 80%;
+  font-family: monospace;
+  border: black 1px solid;
+}
+
+#task-desc {
+    width: 80%;
+    max-width: 80%;
+    font-family: monospace;
+    padding: 10px;
+    border: black 1px solid;
+    border-radius: 6px;
+    margin: 5px;
+    position: relative;
+    z-index: 10;
+}
+
+#task-date {
+    width: fit-content;
+    font-family: monospace;
+    padding: 10px;
+    border: black 1px solid;
+    border-radius: 6px;
+    margin: 5px;
+    position: relative;
+    z-index: 10;
+}
+
+#task-priority {
+    width: fit-content;
+    font-family: monospace;
+    padding: 10px;
+    border: black 1px solid;
+    border-radius: 6px;
+    margin: 5px;
+    position: relative;
+    z-index: 10;
 }
 
 #add-btn {
@@ -40,7 +75,7 @@ input, button {
 ul {
   list-style: none;
   padding-left: 0;
-  margin-top: 20px;
+  margin-top: 0px;
   position: relative;
   z-index: 10;
 }
@@ -253,12 +288,14 @@ button.edit-btn {
   background: rgba(0,0,0,0.5);
 }
 .modal-content {
+    display: flex;
+    flex-direction: column;
   background: white;
-  margin: 15% auto;
+  margin: 10% auto;
   padding: 20px;
   border-radius: 10px;
   width: 80%;
-  max-width: 400px;
+  max-width: 35%;
   position: relative;
   z-index: 21;
 }
@@ -276,7 +313,7 @@ button.edit-btn {
 }
 
 #openAddModal {
-  margin: 10px 0;
+  margin-left: 20px;
   padding: 8px 14px;
   border: none;
   border-radius: 6px;
@@ -286,4 +323,96 @@ button.edit-btn {
 }
 #openAddModal:hover {
   background: #45a049;
+}
+
+
+
+
+/* Container for sidebar + task list */
+.main-container {
+  display: flex;
+  height: calc(100vh - 100px); /* full height minus header margin */
+  margin-top: 60px; /* space for h1 */
+  z-index: 10;
+  position: relative;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 200px;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 20px;
+  border-radius: 8px;
+  margin-left: 20px;
+  flex-shrink: 0;
+}
+
+.sidebar h2 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+.sidebar ul {
+  padding-left: 0;
+  list-style: none;
+}
+
+.sidebar li {
+  margin: 8px 0;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  background: rgba(200, 200, 200, 0.2);
+  transition: background 0.2s;
+}
+
+.sidebar li:hover, .sidebar li.active {
+  background: #4caf50;
+  color: white;
+}
+
+/* Task List Section */
+.task-section {
+  flex: 1;
+  margin-left: 20px;
+  padding-right: 20px;
+  overflow-y: auto;
+}
+ .task-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Priority colored dots */
+.priority-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: black 1px solid;
+}
+
+.night-theme .priority-dot {
+  border: #eee 1px solid;
+}
+
+.priority-dot.low { background: limegreen; }
+.priority-dot.medium { background: gold; }
+.priority-dot.high { background: red; }
+
+.due-date {
+  font-size: 0.85em;
+}
+
+/* Adjust buttons to align nicely */
+.edit-btn, .delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+}
+
+.edit-btn svg, .delete-btn svg {
+  display: block;
 }
