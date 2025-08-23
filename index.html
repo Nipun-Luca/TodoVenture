@@ -1,42 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Themed To-Do List</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Themed To-Do List</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body class="day-theme">
-  <div class="theme-toggle">
-    <button id="toggle-theme">🌙</button>
-  </div>
+    <div class="theme-toggle">
+        <button id="toggle-theme">🌙</button>
+    </div>
 
-  <h1>To-Do List</h1>
-  <input type="text" id="new-task" placeholder="Enter a new task">
-  <button id="add-btn">Add</button>
+    <h1>To-Do List</h1>
+
+    <!-- Add Task Button -->
+    <button id="openAddModal">➕ Add Task</button>
+
+    <!-- Add Task Modal -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <h2>New Task</h2>
+            <input type="text" id="new-task" placeholder="Enter a new task">
+            <input type="date" id="task-date">
+            <select id="task-priority">
+            <option value="low">Low</option>
+            <option value="medium" selected>Medium</option>
+            <option value="high">High</option>
+            </select>
+            <div class="modal-buttons">
+            <button id="add-btn">Add</button>
+            <button id="cancel-add">Cancel</button>
+            </div>
+        </div>
+    </div>
+
   
-  <ul id="task-list"></ul>
+    <ul id="task-list"></ul>
 
-  <!-- Decorative elements -->
-  <div class="sky">
-    <div class="sun"></div>
-    <div class="moon"></div>
-    <div class="cloud cloud1"></div>
-    <div class="cloud cloud2"></div>
-    <div class="cloud cloud3"></div>
-    <div class="cloud cloud4"></div>
+    <!-- Decorative elements -->
+    <div class="sky">
+        <div class="sun"></div>
+        <div class="moon"></div>
+        <div class="cloud cloud1"></div>
+        <div class="cloud cloud2"></div>
+        <div class="cloud cloud3"></div>
+        <div class="cloud cloud4"></div>
+        </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+        <h2>Edit Task</h2>
+        <input type="text" id="edit-input">
+        <button id="save-edit">Save</button>
+        <button id="cancel-edit">Cancel</button>
+        </div>
     </div>
 
-  <!-- Edit Modal -->
-  <div id="editModal" class="modal">
-    <div class="modal-content">
-      <h2>Edit Task</h2>
-      <input type="text" id="edit-input">
-      <button id="save-edit">Save</button>
-      <button id="cancel-edit">Cancel</button>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
