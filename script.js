@@ -126,7 +126,10 @@ function renderTasks() {
 // ==========================
 // --- ADD TASK MODAL ---
 // ==========================
-openAddModalBtn.addEventListener('click', () => openModal('addModal'));
+openAddModalBtn.addEventListener('click', () => {
+  openModal('addModal');
+  document.getElementById('new-task').focus();  // focus the input
+});
 cancelAddBtn.addEventListener('click', () => closeModal('addModal'));
 window.addEventListener('click', e => {
   if (e.target === addModal) closeModal('addModal');
