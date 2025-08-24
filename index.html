@@ -32,10 +32,10 @@
             <div id="addModal" class="modal">
                 <div class="modal-content">
                     <h2>New Task</h2>
-                    <input type="text" id="new-task" placeholder="Enter a task title">
-                    <textarea id="task-desc" placeholder="Description (optional)"></textarea>
-                    <input type="date" id="task-date">
-                    <select id="task-priority">
+                    <input type="text" id="new-task" class="modal-input" placeholder="Enter a task title">
+                    <textarea id="task-desc" class="modal-textarea" placeholder="Description (optional)"></textarea>
+                    <input type="date" id="task-date" class="modal-date">
+                    <select id="task-priority" class="modal-select">
                         <option value="low" selected>Low</option>
                         <option value="medium">Medium</option>
                         <option value="high">High</option>
@@ -52,13 +52,22 @@
         </div>
     </div>
 
-    <!-- Edit Modal -->
+    <!-- Edit Task Modal -->
     <div id="editModal" class="modal">
         <div class="modal-content">
             <h2>Edit Task</h2>
-            <input type="text" id="edit-input">
-            <button id="save-edit">Save</button>
-            <button id="cancel-edit">Cancel</button>
+            <input type="text" id="edit-input" class="modal-input" placeholder="Edit task title">
+            <textarea id="edit-desc" class="modal-textarea" placeholder="Edit description (optional)"></textarea>
+            <input type="date" id="edit-date" class="modal-date">
+            <select id="edit-priority" class="modal-select">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+            </select>
+            <div class="modal-buttons">
+                <button id="save-edit">Save</button>
+                <button id="cancel-edit">Cancel</button>
+            </div>
         </div>
     </div>
 

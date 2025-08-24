@@ -27,23 +27,6 @@ input, textarea, button {
   font-family: monospace;
 }
 
-#new-task, #task-desc {
-  width: 80%;
-  border: 1px solid black;
-}
-
-#task-desc {
-  max-width: 80%;
-}
-
-#task-date, #task-priority {
-  width: fit-content;
-  border: 1px solid black;
-  padding: 10px;
-  border-radius: 6px;
-  margin: 5px;
-}
-
 ul {
   list-style: none;
   padding-left: 0;
@@ -449,7 +432,7 @@ button.edit-btn, button.delete-btn {
 }
 
 /* Buttons */
-#add-btn, #openAddModal {
+#openAddModal {
   background: #4aa600;
   font-weight: bold;
   color: white;
@@ -478,12 +461,12 @@ button.edit-btn, button.delete-btn {
 
 /* Modals */
 .modal {
-  display: none; 
+  display: none;
   position: fixed;
-  z-index: 20; 
+  z-index: 20;
   left: 0; top: 0;
   width: 100%; height: 100%;
-  background: rgba(0,0,0,0.5);
+  transition: background 0.5s ease;
 }
 
 .modal-content {
@@ -491,9 +474,109 @@ button.edit-btn, button.delete-btn {
   flex-direction: column;
   margin: 10% auto;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 12px;
   width: 80%;
   max-width: 35%;
   position: relative;
   z-index: 21;
+
+  /* Start off-screen for animation */
+  transform: translateX(-1500px) scale(1);
+  animation-fill-mode: forwards;
+}
+
+/* --- Keyframes --- */
+@keyframes slideInLeft {
+  0% {
+    transform: translateX(-1500px) scale(0.9);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(30px) scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes slideOutLeft {
+  0% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-1500px) scale(0.9);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeInOverlay {
+  from { background: rgba(0,0,0,0); }
+  to { background: rgba(0,0,0,0.5); }
+}
+
+@keyframes fadeOutOverlay {
+  from { background: rgba(0,0,0,0.5); }
+  to { background: rgba(0,0,0,0); }
+}
+
+@keyframes slideOutRight {
+  0% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(1500px) scale(0.9);
+    opacity: 0;
+  }
+}
+
+
+/* Shared inputs */
+.modal-input,
+.modal-textarea {
+  width: 80%;
+  border: 1px solid black;
+}
+
+.modal-textarea {
+  max-width: 80%;
+}
+
+.modal-date,
+.modal-select {
+  width: fit-content;
+  border: 1px solid black;
+  padding: 10px;
+  border-radius: 6px;
+  margin: 5px;
+}
+
+/* --- Modal Buttons --- */
+.modal-buttons button {
+  background: #6c5ce7;
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
+  padding: 8px 14px;
+  border: none;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.modal-buttons button:hover {
+  background: #5a4bcf;
+}
+
+.modal-buttons button#cancel-add,
+.modal-buttons button#cancel-edit {
+  background: #b2bec3;
+  color: #2d3436;
+}
+
+.modal-buttons button#cancel-add:hover,
+.modal-buttons button#cancel-edit:hover {
+  background: #636e72;
+  color: #fff;
 }

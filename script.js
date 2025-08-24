@@ -87,18 +87,18 @@ function renderTasks() {
       const rightContainer = document.createElement('div');
       rightContainer.className = 'task-right';
 
+      const priority = document.createElement('span');
+      priority.className = `priority ${task.priority}`;
+      priority.textContent =
+        task.priority.charAt(0).toUpperCase() + task.priority.slice(1);
+      rightContainer.appendChild(priority);
+
       if (task.dueDate) {
         const dueDate = document.createElement('span');
         dueDate.className = 'due-date';
         dueDate.textContent = task.dueDate;
         rightContainer.appendChild(dueDate);
       }
-
-      const priority = document.createElement('span');
-      priority.className = `priority ${task.priority}`;
-      priority.textContent =
-        task.priority.charAt(0).toUpperCase() + task.priority.slice(1);
-      rightContainer.appendChild(priority);
 
       // Delete button
       const deleteBtn = document.createElement('button');
@@ -123,15 +123,17 @@ function renderTasks() {
     });
 }
 
-
-// --- Add Task Modal ---
-openAddModalBtn.addEventListener('click', () => {
-  addModal.style.display = 'block';
-  input.focus();
+// ==========================
+// --- ADD TASK MODAL ---
+// ==========================
+openAddModalBtn.addEventListener('click', () => openModal('addModal'));
+cancelAddBtn.addEventListener('click', () => closeModal('addModal'));
+window.addEventListener('click', e => {
+  if (e.target === addModal) closeModal('addModal');
 });
 
-cancelAddBtn.addEventListener('click', () => addModal.style.display = 'none');
-window.addEventListener('click', (e) => { if (e.target === addModal) addModal.style.display = 'none'; });
+addBtn.addEventListener('click', addTask);
+input.addEventListener('keypress', e => { if (e.key === 'Enter') addTask(); });
 
 function addTask() {
   const taskText = input.value.trim();
@@ -150,7 +152,7 @@ function addTask() {
   saveTasks();
   renderTasks();
 
-  // reset fields
+  // reset fields instantly
   input.value = '';
   taskDescription.value = '';
   dateInput.value = '';
@@ -158,54 +160,129 @@ function addTask() {
   addModal.style.display = 'none';
 }
 
-addBtn.addEventListener('click', addTask);
-input.addEventListener('keypress', e => { if (e.key === 'Enter') addTask(); });
 
-// --- Toggle Complete ---
+// ==========================
+// --- EDIT TASK MODAL ---
+// ==========================
+function openEditModal(index) {
+  currentEditIndex = index;
+  const task = tasks[index];
+
+  // populate fields
+  document.getElementById('edit-input').value = task.text;
+  document.getElementById('edit-desc').value = task.description || '';
+  document.getElementById('edit-date').value = task.dueDate || '';
+  document.getElementById('edit-priority').value = task.priority || 'low';
+
+  // use animation helper
+  openModal('editModal');
+
+  // focus on title input
+  document.getElementById('edit-input').focus();
+}
+
+saveEditBtn.addEventListener('click', saveEdit);
+editInput.addEventListener('keypress', e => { if (e.key === 'Enter') saveEdit(); });
+cancelEditBtn.addEventListener('click', () => closeModal('editModal'));
+window.addEventListener('click', e => {
+  if (e.target === editModal) closeModal('editModal');
+});
+
+function saveEdit() {
+  if (currentEditIndex === null) return;
+
+  const newText = document.getElementById('edit-input').value.trim();
+  const newDesc = document.getElementById('edit-desc').value.trim();
+  const newDate = document.getElementById('edit-date').value;
+  const newPriority = document.getElementById('edit-priority').value;
+
+  if (newText) {
+    tasks[currentEditIndex].text = newText;
+    tasks[currentEditIndex].description = newDesc || null;
+    tasks[currentEditIndex].dueDate = newDate || new Date().toISOString().split("T")[0];
+    tasks[currentEditIndex].priority = newPriority;
+
+    saveTasks();
+    renderTasks();
+  }
+
+  // close instantly (no animation)
+  closeEditModal();
+}
+
+function closeEditModal() {
+  editModal.style.display = 'none';
+  currentEditIndex = null;
+
+  // clear fields
+  document.getElementById('edit-input').value = '';
+  document.getElementById('edit-desc').value = '';
+  document.getElementById('edit-date').value = '';
+  document.getElementById('edit-priority').value = 'low';
+}
+
+
+// ==========================
+// --- TASK ACTIONS ---
+// ==========================
 function toggleTask(index) {
   tasks[index].completed = !tasks[index].completed;
   saveTasks();
   renderTasks();
 }
 
-// --- Delete Task ---
 function deleteTask(index) {
   tasks.splice(index, 1);
   saveTasks();
   renderTasks();
 }
 
-// --- Edit Task ---
-function openEditModal(index) {
-  currentEditIndex = index;
-  editInput.value = tasks[index].text;
-  editModal.style.display = 'block';
-  editInput.focus();
+
+// ==========================
+// --- MODAL ANIMATION HELPERS ---
+// ==========================
+function openModal(modalId) {
+  const modal = document.getElementById(modalId);
+  modal.style.display = 'block';
+  const content = modal.querySelector('.modal-content');
+
+  modal.style.animation = 'fadeInOverlay 0.5s forwards';
+  content.style.animation = 'slideInLeft 0.5s forwards';
 }
 
-function saveEdit() {
-  if (currentEditIndex !== null) {
-    const newText = editInput.value.trim();
-    if (newText) {
-      tasks[currentEditIndex].text = newText;
-      saveTasks();
-      renderTasks();
+function closeModal(modalId) {
+  const modal = document.getElementById(modalId);
+  const content = modal.querySelector('.modal-content');
+
+  modal.style.animation = 'fadeOutOverlay 0.5s forwards';
+  content.style.animation = 'slideOutRight 0.5s forwards';
+
+  setTimeout(() => {
+    modal.style.display = 'none';
+
+    // reset edit modal fields if needed
+    if (modalId === 'editModal') {
+      currentEditIndex = null;
+      document.getElementById('edit-input').value = '';
+      document.getElementById('edit-desc').value = '';
+      document.getElementById('edit-date').value = '';
+      document.getElementById('edit-priority').value = 'low';
     }
-    closeEditModal();
-  }
+
+    // reset add modal fields if needed
+    if (modalId === 'addModal') {
+      document.getElementById('new-task').value = '';
+      document.getElementById('task-desc').value = '';
+      document.getElementById('task-date').value = '';
+      document.getElementById('task-priority').value = 'low';
+    }
+  }, 500);
 }
 
-saveEditBtn.addEventListener('click', saveEdit);
-editInput.addEventListener('keypress', e => { if (e.key === 'Enter') saveEdit(); });
-cancelEditBtn.addEventListener('click', closeEditModal);
-window.addEventListener('click', e => { if (e.target === editModal) closeEditModal(); });
 
-function closeEditModal() {
-  editModal.style.display = 'none';
-  currentEditIndex = null;
-}
-
-// --- Theme Toggle ---
+// ==========================
+// --- THEME TOGGLE & STARS ---
+// ==========================
 function createStars(count = 50) {
   const sky = document.querySelector('.sky');
   document.querySelectorAll('.star').forEach(star => star.remove());
@@ -230,10 +307,16 @@ toggleThemeBtn.addEventListener('click', () => {
   createStars();
 });
 
-// --- Local Storage ---
+
+// ==========================
+// --- LOCAL STORAGE ---
+// ==========================
 function saveTasks() { localStorage.setItem('tasks', JSON.stringify(tasks)); }
 function saveProjects() { localStorage.setItem('projects', JSON.stringify(projects)); }
 
-// --- Initial Render ---
+
+// ==========================
+// --- INITIAL RENDER ---
+// ==========================
 renderProjects();
 renderTasks();
