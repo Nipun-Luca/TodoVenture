@@ -16,10 +16,12 @@
     <div class="main-container">
         <!-- Sidebar -->
         <div class="sidebar">
-            <h3>Smart Lists</h3>
+            <h3>Tasks</h3>
             <ul id="smart-list"></ul>
 
-            <h2>Projects</h2>
+            <div class="divider"></div>
+
+            <h3>Projects</h3>
             <ul id="project-list">
                 <li class="active" data-project="General">General</li>
             </ul>
@@ -81,9 +83,23 @@
         <div class="modal-content">
             <h2>New Project</h2>
             <input type="text" id="new-project-name" class="modal-input" placeholder="Project name">
+            <p id="project-error" class="project-error"></p>
             <div class="modal-buttons">
             <button id="confirm-add-project">Add</button>
             <button id="cancel-add-project">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Project Modal -->
+    <div id="editProjectModal" class="modal">
+        <div class="modal-content">
+            <h2>Edit Project</h2>
+            <input type="text" id="edit-project-name" placeholder="Project name" />
+            <p id="edit-project-error" class="project-error"></p>
+            <div class="modal-buttons">
+            <button id="confirm-edit-project">Save</button>
+            <button id="cancel-edit-project">Cancel</button>
             </div>
         </div>
     </div>

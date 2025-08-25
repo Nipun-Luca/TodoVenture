@@ -286,7 +286,11 @@ button.edit-btn, button.delete-btn {
 
 /* Sidebar */
 .sidebar {
-  width: 200px;
+  width: 240px;
+  height: fit-content;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-sizing: border-box; 
   background: rgba(255, 255, 255, 0.8);
   color: #333;
   padding: 20px;
@@ -321,7 +325,7 @@ button.edit-btn, button.delete-btn {
 
 .day-theme .sidebar li:hover,
 .day-theme .sidebar li.active {
-  background: #0077b6;
+  background: #70c52b;
   color: white;
 }
 
@@ -331,6 +335,7 @@ button.edit-btn, button.delete-btn {
   color: #fff;
 }
 
+/* Projects */
 #add-project-btn {
   margin-top: 15px;
   width: 100%;
@@ -342,6 +347,37 @@ button.edit-btn, button.delete-btn {
   cursor: pointer;
   font-weight: bold;
   transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.project-error {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 5px;
+  display: none;
+}
+
+.project-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.project-actions button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.project-edit {
+    color: #1500ff;
+    padding: initial;
+    margin: initial;
+}
+
+.project-edit:hover {
+  transform: scale(1.2);
+  color: #005f8a;
 }
 
 #add-project-btn:hover {
@@ -368,9 +404,15 @@ button.edit-btn, button.delete-btn {
 /* Smart lists look slightly smaller than projects */
 .sidebar h3 {
   margin-top: 0;
-  font-size: 14px;
-  color: inherit;
-  opacity: 0.9;
+  margin-bottom: 12px;
+  color: dimgray;
+}
+
+.divider {
+    height: 1px;                /* thickness of the line */
+    background-color: dimgray;      /* color of the line */
+    margin: 20px 0;             /* space above and below */
+    border-radius: 2px;          /* optional: slightly rounded edges */
 }
 
 #smart-list {

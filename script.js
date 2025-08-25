@@ -24,6 +24,7 @@ let projects = JSON.parse(localStorage.getItem('projects')) || [{ name: "General
 let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 let currentProject = "General";
 let currentEditIndex = null;
+let currentEditProjectIndex = null;
 
 // --- Render Projects Sidebar ---
 function renderProjects() {
@@ -40,23 +41,122 @@ function renderProjects() {
 
     li.addEventListener('click', () => switchProject(proj.name));
 
-    // Add delete icon if not "General"
+    // Add edit + delete icons if not "General"
     if (proj.name !== "General") {
+      const actionsDiv = document.createElement('div');
+      actionsDiv.className = 'project-actions';
+
+      // Edit button SVG
+      const editBtn = document.createElement('button');
+      editBtn.className = 'project-edit';
+      editBtn.innerHTML = `
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 20h9"/>
+  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+</svg>
+
+      `;
+      editBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // prevent switching project
+        openEditProjectModal(index);
+      });
+
+      // Delete button SVG
       const delBtn = document.createElement('button');
       delBtn.className = 'project-delete';
-      delBtn.innerHTML = '×';
+      delBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 16 16">
+  <line x1="3" y1="3" x2="13" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <line x1="13" y1="3" x2="3" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg>`;
       delBtn.addEventListener('click', (e) => {
         e.stopPropagation(); // prevent switching project
         if (confirm(`Delete project "${proj.name}"? All its tasks will also be removed.`)) {
           deleteProject(index);
         }
       });
-      li.appendChild(delBtn);
+
+      // group buttons
+      actionsDiv.appendChild(editBtn);
+      actionsDiv.appendChild(delBtn);
+      li.appendChild(actionsDiv);
     }
 
     projectList.appendChild(li);
   });
 }
+
+// Projects
+function openEditProjectModal(index) {
+  const proj = projects[index];
+  if (proj.name === "General") {
+    alert("The 'General' project cannot be renamed.");
+    return;
+  }
+
+  currentEditProjectIndex = index;
+
+  const input = document.getElementById('edit-project-name');
+  const errorEl = document.getElementById('edit-project-error');
+
+  input.value = proj.name;
+  errorEl.textContent = '';
+  errorEl.style.display = 'none';
+
+  openModal('editProjectModal');
+
+  // focus on input field
+  input.focus();
+
+  // Enter key acts like confirm
+  input.onkeydown = (e) => {
+    if (e.key === 'Enter') {
+      document.getElementById('confirm-edit-project').click();
+    }
+  };
+}
+
+// Confirm button listener (only once)
+document.getElementById('confirm-edit-project').addEventListener('click', () => {
+  const nameInput = document.getElementById('edit-project-name');
+  const errorEl = document.getElementById('edit-project-error');
+  let name = nameInput.value.trim();
+
+  // reset error
+  errorEl.style.display = 'none';
+  errorEl.textContent = '';
+
+  if (!name) {
+    errorEl.textContent = "Project name cannot be empty.";
+    errorEl.style.display = 'block';
+    return;
+  }
+
+  // Check duplicate (ignore same project being edited)
+  if (projects.some((p, idx) => p.name.toLowerCase() === name.toLowerCase() && idx !== currentEditProjectIndex)) {
+    errorEl.textContent = "A project with this name already exists.";
+    errorEl.style.display = 'block';
+    return;
+  }
+
+  projects[currentEditProjectIndex].name = name;
+  saveProjects();
+  renderProjects();
+  closeModal('editProjectModal');
+  nameInput.value = '';
+});
+
+// Cancel button listener
+document.getElementById('cancel-edit-project').addEventListener('click', () => {
+  closeModal('editProjectModal');
+});
+
+const editProjectModal = document.getElementById('editProjectModal');
+
+window.addEventListener('click', (e) => {
+  if (e.target === editProjectModal) {
+    closeModal('editProjectModal');
+  }
+});
 
 // --- Delete Project ---
 function deleteProject(index) {
@@ -97,19 +197,46 @@ window.addEventListener('click', e => {
 });
 
 // Confirm adding a new project
-document.getElementById('confirm-add-project').addEventListener('click', () => {
-    const nameInput = document.getElementById('new-project-name');
+const nameInput = document.getElementById('new-project-name');
+const errorEl = document.getElementById('project-error');
+const confirmBtn = document.getElementById('confirm-add-project');
+
+function addProjectHandler() {
     let name = nameInput.value.trim();
 
-    if (!name) return alert("Project name cannot be empty.");
+    // Reset error
+    errorEl.style.display = 'none';
+    errorEl.textContent = '';
+
+    if (!name) {
+        errorEl.textContent = "Project name cannot be empty.";
+        errorEl.style.display = 'block';
+        return;
+    }
+
+    if (projects.some(p => p.name.toLowerCase() === name.toLowerCase())) {
+        errorEl.textContent = "A project with this name already exists.";
+        errorEl.style.display = 'block';
+        return;
+    }
 
     projects.push({ name });
     saveProjects();
     renderProjects();
     closeModal('addProjectModal');
 
-    // Clear the input field after saving
+    // Reset input
     nameInput.value = '';
+}
+
+// Button click
+confirmBtn.addEventListener('click', addProjectHandler);
+
+// Press Enter inside the input
+nameInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        addProjectHandler();
+    }
 });
 
 
