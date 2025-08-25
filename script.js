@@ -28,8 +28,9 @@ let currentEditIndex = null;
 // --- Render Projects Sidebar ---
 function renderProjects() {
   projectList.innerHTML = '';
-  projects.forEach((proj) => {
+  projects.forEach((proj, index) => {
     const li = document.createElement('li');
+    
     li.textContent = proj.name;
     
     // Set active based on currentView
@@ -38,8 +39,44 @@ function renderProjects() {
     }
 
     li.addEventListener('click', () => switchProject(proj.name));
+
+    // Add delete icon if not "General"
+    if (proj.name !== "General") {
+      const delBtn = document.createElement('button');
+      delBtn.className = 'project-delete';
+      delBtn.innerHTML = '×';
+      delBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // prevent switching project
+        if (confirm(`Delete project "${proj.name}"? All its tasks will also be removed.`)) {
+          deleteProject(index);
+        }
+      });
+      li.appendChild(delBtn);
+    }
+
     projectList.appendChild(li);
   });
+}
+
+// --- Delete Project ---
+function deleteProject(index) {
+  const projName = projects[index].name;
+
+  // Remove all tasks in this project
+  tasks = tasks.filter(t => t.project !== projName);
+  saveTasks();
+
+  // Remove project
+  projects.splice(index, 1);
+  saveProjects();
+
+  // If deleted project was active, switch view to General
+  if (currentView.type === 'project' && currentView.value === projName) {
+    switchView('project', 'General');
+  } else {
+    renderProjects();
+    renderTasks();
+  }
 }
 
 function switchProject(projectName) {
@@ -61,17 +98,18 @@ window.addEventListener('click', e => {
 
 // Confirm adding a new project
 document.getElementById('confirm-add-project').addEventListener('click', () => {
-  const nameInput = document.getElementById('new-project-name');
-  const descInput = document.getElementById('new-project-desc');
-  const name = nameInput.value.trim();
-  const description = descInput.value.trim();
+    const nameInput = document.getElementById('new-project-name');
+    let name = nameInput.value.trim();
 
-  if (!name) return alert("Project name cannot be empty.");
+    if (!name) return alert("Project name cannot be empty.");
 
-  projects.push({ name, description });
-  saveProjects();
-  renderProjects();
-  closeModal('addProjectModal');
+    projects.push({ name });
+    saveProjects();
+    renderProjects();
+    closeModal('addProjectModal');
+
+    // Clear the input field after saving
+    nameInput.value = '';
 });
 
 
@@ -247,24 +285,25 @@ function renderTasks() {
 }
 
 function populateProjectSelect() {
-  const select = document.getElementById('task-project');
-  select.innerHTML = ''; // clear old options
-  projects.forEach(p => {
-    const option = document.createElement('option');
-    option.value = p.name;
-    option.textContent = p.name;
-    if (p.name === currentProject) option.selected = true;
-    select.appendChild(option);
-  });
+    const addSelect = document.getElementById('add-task-project');
+    addSelect.innerHTML = ''; // clear old options
+    projects.forEach(p => {
+        const option = document.createElement('option');
+        option.value = p.name;
+        option.textContent = p.name;
+        if (p.name === currentProject) option.selected = true; // preselect current project
+        addSelect.appendChild(option);
+    });
 }
 
 // ==========================
 // --- ADD TASK MODAL ---
 // ==========================
 openAddModalBtn.addEventListener('click', () => {
-  populateProjectSelect();
-  openModal('addModal');
-  document.getElementById('new-task').focus();
+    currentProject = currentView.type === 'project' ? currentView.value : 'General';
+    populateProjectSelect();
+    openModal('addModal');
+    document.getElementById('new-task').focus();
 });
 cancelAddBtn.addEventListener('click', () => closeModal('addModal'));
 window.addEventListener('click', e => {
@@ -277,16 +316,17 @@ input.addEventListener('keypress', e => { if (e.key === 'Enter') addTask(); });
 function addTask() {
     const taskText = input.value.trim();
     const descText = taskDescription.value.trim();
-    const selectedProject = document.getElementById('task-project').value;
+    const selectedProject = document.getElementById('add-task-project').value; // use unique ID
+
     if (!taskText) return;
 
     tasks.push({
-    text: taskText,
-    description: descText || null,
-    completed: false,
-    dueDate: dateInput.value || new Date().toISOString().split("T")[0],
-    priority: priorityInput.value,
-    project: selectedProject
+        text: taskText,
+        description: descText || null,
+        completed: false,
+        dueDate: dateInput.value || new Date().toISOString().split("T")[0],
+        priority: priorityInput.value,
+        project: selectedProject
     });
 
     saveTasks();
@@ -300,25 +340,34 @@ function addTask() {
     addModal.style.display = 'none';
 }
 
-
 // ==========================
 // --- EDIT TASK MODAL ---
 // ==========================
 function openEditModal(index) {
-  currentEditIndex = index;
-  const task = tasks[index];
+    currentEditIndex = index;
+    const task = tasks[index];
 
-  // populate fields
-  document.getElementById('edit-input').value = task.text;
-  document.getElementById('edit-desc').value = task.description || '';
-  document.getElementById('edit-date').value = task.dueDate || '';
-  document.getElementById('edit-priority').value = task.priority || 'low';
+    // populate fields
+    document.getElementById('edit-input').value = task.text;
+    document.getElementById('edit-desc').value = task.description || '';
+    document.getElementById('edit-date').value = task.dueDate || '';
+    document.getElementById('edit-priority').value = task.priority || 'low';
 
-  // use animation helper
-  openModal('editModal');
+    const editProjectSelect = document.getElementById('edit-task-project');
+    editProjectSelect.innerHTML = ''; // clear old options
+    projects.forEach(p => {
+        const option = document.createElement('option');
+        option.value = p.name;
+        option.textContent = p.name;
+        if (p.name === task.project) option.selected = true; // preselect current project
+        editProjectSelect.appendChild(option);
+    });
 
-  // focus on title input
-  document.getElementById('edit-input').focus();
+    // use animation helper
+    openModal('editModal');
+
+    // focus on title input
+    document.getElementById('edit-input').focus();
 }
 
 saveEditBtn.addEventListener('click', saveEdit);
@@ -329,25 +378,26 @@ window.addEventListener('click', e => {
 });
 
 function saveEdit() {
-  if (currentEditIndex === null) return;
+    if (currentEditIndex === null) return;
 
-  const newText = document.getElementById('edit-input').value.trim();
-  const newDesc = document.getElementById('edit-desc').value.trim();
-  const newDate = document.getElementById('edit-date').value;
-  const newPriority = document.getElementById('edit-priority').value;
+    const newText = document.getElementById('edit-input').value.trim();
+    const newDesc = document.getElementById('edit-desc').value.trim();
+    const newDate = document.getElementById('edit-date').value;
+    const newPriority = document.getElementById('edit-priority').value;
+    const newProject = document.getElementById('edit-task-project').value; // <-- NEW
 
-  if (newText) {
-    tasks[currentEditIndex].text = newText;
-    tasks[currentEditIndex].description = newDesc || null;
-    tasks[currentEditIndex].dueDate = newDate || new Date().toISOString().split("T")[0];
-    tasks[currentEditIndex].priority = newPriority;
+    if (newText) {
+        tasks[currentEditIndex].text = newText;
+        tasks[currentEditIndex].description = newDesc || null;
+        tasks[currentEditIndex].dueDate = newDate || new Date().toISOString().split("T")[0];
+        tasks[currentEditIndex].priority = newPriority;
+        tasks[currentEditIndex].project = newProject; // <-- NEW
 
-    saveTasks();
-    renderTasks();
-  }
+        saveTasks();
+        renderTasks();
+    }
 
-  // close instantly (no animation)
-  closeEditModal();
+    closeEditModal();
 }
 
 function closeEditModal() {

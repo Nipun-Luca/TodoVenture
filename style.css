@@ -365,8 +365,6 @@ button.edit-btn, button.delete-btn {
   transform: scale(1.2);
 }
 
-
-
 /* Smart lists look slightly smaller than projects */
 .sidebar h3 {
   margin-top: 0;
@@ -418,9 +416,6 @@ button.edit-btn, button.delete-btn {
   color: white;
   background: rgba(0,0,0,0.4);
 }
-
-
-
 
 /* Task Section */
 .task-check {
@@ -604,7 +599,6 @@ button.edit-btn, button.delete-btn {
     opacity: 0;
   }
 }
-
 
 /* Shared inputs */
 .modal-input,
