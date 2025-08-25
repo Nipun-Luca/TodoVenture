@@ -31,7 +31,12 @@ function renderProjects() {
   projects.forEach((proj) => {
     const li = document.createElement('li');
     li.textContent = proj.name;
-    li.className = proj.name === currentProject ? 'active' : '';
+    
+    // Set active based on currentView
+    if (currentView.type === 'project' && currentView.value === proj.name) {
+      li.className = 'active';
+    }
+
     li.addEventListener('click', () => switchProject(proj.name));
     projectList.appendChild(li);
   });
@@ -39,96 +44,227 @@ function renderProjects() {
 
 function switchProject(projectName) {
   currentProject = projectName;
-  renderProjects();
-  renderTasks();
+  switchView('project', projectName);
 }
 
 // --- Add New Project ---
 addProjectBtn.addEventListener('click', () => {
-  const name = prompt("Enter project name:");
-  if (!name) return;
-  const description = prompt("Optional description:");
+  openModal('addProjectModal');
+  document.getElementById('new-project-name').focus();
+});
+
+// Cancel button
+document.getElementById('cancel-add-project').addEventListener('click', () => closeModal('addProjectModal'));
+window.addEventListener('click', e => {
+  if (e.target === document.getElementById('addProjectModal')) closeModal('addProjectModal');
+});
+
+// Confirm adding a new project
+document.getElementById('confirm-add-project').addEventListener('click', () => {
+  const nameInput = document.getElementById('new-project-name');
+  const descInput = document.getElementById('new-project-desc');
+  const name = nameInput.value.trim();
+  const description = descInput.value.trim();
+
+  if (!name) return alert("Project name cannot be empty.");
+
   projects.push({ name, description });
   saveProjects();
   renderProjects();
+  closeModal('addProjectModal');
 });
+
+
+// ---------- New: View state ----------
+let currentView = { type: 'project', value: 'General' }; // default view
+
+// ---------- Smart list rendering ----------
+const smartListEl = document.getElementById('smart-list');
+
+function renderSmartLists() {
+  if (!smartListEl) return;
+  const lists = [
+    { key: 'all', label: 'All Tasks' },
+    { key: 'today', label: 'Today' },
+    { key: 'week', label: 'This Week' },
+    { key: 'overdue', label: 'Overdue' }
+  ];
+
+  smartListEl.innerHTML = '';
+  lists.forEach(item => {
+    const li = document.createElement('li');
+    li.dataset.smart = item.key;
+    li.textContent = item.label;
+
+    // optional: count badge (you can omit if not wanted)
+    const badge = document.createElement('span');
+    badge.className = 'smart-badge';
+    badge.textContent = countForSmartList(item.key);
+    li.appendChild(badge);
+
+    // active class
+    if (currentView.type === 'smart' && currentView.value === item.key) {
+      li.classList.add('active');
+    }
+
+    li.addEventListener('click', () => switchView('smart', item.key));
+    smartListEl.appendChild(li);
+  });
+}
+
+// ---------- Helper: counts for smart lists (used for badges) ----------
+function countForSmartList(key) {
+  const now = new Date();
+  return tasks.reduce((acc, t) => {
+    const d = t.dueDate;
+    if (key === 'all') return acc + 1;
+    if (!d) return acc; // tasks without due date don't count for date-based lists
+    const date = new Date(d + 'T00:00:00');
+    if (key === 'today') {
+      return isSameDay(date, now) ? acc + 1 : acc;
+    }
+    if (key === 'week') {
+      return isWithinNextDays(date, 7) ? acc + 1 : acc;
+    }
+    if (key === 'overdue') {
+      return (date < startOfDay(now) && !t.completed) ? acc + 1 : acc;
+    }
+    return acc;
+  }, 0);
+}
+
+// ---------- Utilities for date checks ----------
+function startOfDay(d) {
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+}
+function isSameDay(a, b) {
+  return a.getFullYear() === b.getFullYear() &&
+         a.getMonth() === b.getMonth() &&
+         a.getDate() === b.getDate();
+}
+function isWithinNextDays(date, days) {
+  const today = startOfDay(new Date());
+  const end = new Date(today);
+  end.setDate(end.getDate() + days);
+  return date >= today && date < end;
+}
+
+// ---------- switchView: toggles between project/smart ----------
+function switchView(type, value) {
+  currentView = { type, value };
+  renderProjects();    // updates active class
+  renderSmartLists();  // updates smart list active class
+  renderTasks();
+  localStorage.setItem('currentView', JSON.stringify(currentView));
+}
 
 // --- Render Tasks ---
 function renderTasks() {
   taskList.innerHTML = '';
-  tasks
-    .filter(t => t.project === currentProject)
-    .forEach((task, index) => {
-      const li = document.createElement('li');
-      li.className = 'task-item';
-      if (task.completed) li.classList.add('completed');
 
-      // Left: checkbox + title
-      const leftContainer = document.createElement('div');
-      leftContainer.className = 'task-left';
+  // Choose tasks depending on view
+  let visibleTasks = tasks.map((t, i) => ({ task: t, index: i }));
 
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.className = 'task-check';
-      checkbox.checked = task.completed;
-      checkbox.addEventListener('click', (e) => {
-        e.stopPropagation(); // don’t trigger modal when clicking checkbox
-        toggleTask(index);
-      });
-
-      const title = document.createElement('span');
-      title.className = 'task-title';
-      title.textContent = task.text;
-
-      leftContainer.appendChild(checkbox);
-      leftContainer.appendChild(title);
-
-      // Right: date + priority
-      const rightContainer = document.createElement('div');
-      rightContainer.className = 'task-right';
-
-      const priority = document.createElement('span');
-      priority.className = `priority ${task.priority}`;
-      priority.textContent =
-        task.priority.charAt(0).toUpperCase() + task.priority.slice(1);
-      rightContainer.appendChild(priority);
-
-      if (task.dueDate) {
-        const dueDate = document.createElement('span');
-        dueDate.className = 'due-date';
-        dueDate.textContent = task.dueDate;
-        rightContainer.appendChild(dueDate);
-      }
-
-      // Delete button
-      const deleteBtn = document.createElement('button');
-      deleteBtn.className = 'delete-btn';
-      deleteBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-        <path d="M5.5 5.5a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0v-6a.5.5 0 0 1 .5-.5zm3 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0v-6a.5.5 0 0 1 .5-.5z"/>
-        <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1 0-2H5h6h1.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118z"/>
-      </svg>`;
-      deleteBtn.addEventListener('click', (e) => {
-        e.stopPropagation(); // don’t open modal when deleting
-        deleteTask(index);
-      });
-      rightContainer.appendChild(deleteBtn);
-
-      li.appendChild(leftContainer);
-      li.appendChild(rightContainer);
-
-      // Clicking anywhere on li (except checkbox/delete) opens modal
-      li.addEventListener('click', () => openEditModal(index));
-
-      taskList.appendChild(li);
+  if (currentView.type === 'project') {
+    visibleTasks = visibleTasks.filter(item => item.task.project === currentView.value);
+  } else if (currentView.type === 'smart') {
+    const now = new Date();
+    visibleTasks = visibleTasks.filter(({ task }) => {
+      const d = task.dueDate;
+      if (currentView.value === 'all') return true;
+      if (!d) return false;
+      const date = new Date(d + 'T00:00:00');
+      if (currentView.value === 'today') return isSameDay(date, now);
+      if (currentView.value === 'week') return isWithinNextDays(date, 7);
+      if (currentView.value === 'overdue') return date < startOfDay(now) && !task.completed;
+      return false;
     });
+  }
+
+  visibleTasks.forEach(({ task, index }) => {
+    const li = document.createElement('li');
+    li.className = 'task-item';
+    if (task.completed) li.classList.add('completed');
+
+    // Left: checkbox + title
+    const leftContainer = document.createElement('div');
+    leftContainer.className = 'task-left';
+
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.className = 'task-check';
+    checkbox.checked = task.completed;
+    checkbox.addEventListener('click', (e) => {
+      e.stopPropagation(); // don’t trigger modal when clicking checkbox
+      toggleTask(index);
+    });
+
+    const title = document.createElement('span');
+    title.className = 'task-title';
+    title.textContent = task.text;
+
+    leftContainer.appendChild(checkbox);
+    leftContainer.appendChild(title);
+
+    // Right: priority + date + delete
+    const rightContainer = document.createElement('div');
+    rightContainer.className = 'task-right';
+
+    const priority = document.createElement('span');
+    priority.className = `priority ${task.priority}`;
+    priority.textContent =
+      task.priority.charAt(0).toUpperCase() + task.priority.slice(1);
+    rightContainer.appendChild(priority);
+
+    if (task.dueDate) {
+      const dueDate = document.createElement('span');
+      dueDate.className = 'due-date';
+      dueDate.textContent = task.dueDate;
+      rightContainer.appendChild(dueDate);
+    }
+
+    // Delete button (unchanged SVG)
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'delete-btn';
+    deleteBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+      <path d="M5.5 5.5a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0v-6a.5.5 0 0 1 .5-.5zm3 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0v-6a.5.5 0 0 1 .5-.5z"/>
+      <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1 0-2H5h6h1.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118z"/>
+    </svg>`;
+    deleteBtn.addEventListener('click', (e) => {
+      e.stopPropagation(); // don’t open modal when deleting
+      deleteTask(index);
+    });
+    rightContainer.appendChild(deleteBtn);
+
+    li.appendChild(leftContainer);
+    li.appendChild(rightContainer);
+
+    // Clicking anywhere on li (except checkbox/delete) opens modal
+    li.addEventListener('click', () => openEditModal(index));
+
+    taskList.appendChild(li);
+  });
+}
+
+function populateProjectSelect() {
+  const select = document.getElementById('task-project');
+  select.innerHTML = ''; // clear old options
+  projects.forEach(p => {
+    const option = document.createElement('option');
+    option.value = p.name;
+    option.textContent = p.name;
+    if (p.name === currentProject) option.selected = true;
+    select.appendChild(option);
+  });
 }
 
 // ==========================
 // --- ADD TASK MODAL ---
 // ==========================
 openAddModalBtn.addEventListener('click', () => {
+  populateProjectSelect();
   openModal('addModal');
-  document.getElementById('new-task').focus();  // focus the input
+  document.getElementById('new-task').focus();
 });
 cancelAddBtn.addEventListener('click', () => closeModal('addModal'));
 window.addEventListener('click', e => {
@@ -139,28 +275,29 @@ addBtn.addEventListener('click', addTask);
 input.addEventListener('keypress', e => { if (e.key === 'Enter') addTask(); });
 
 function addTask() {
-  const taskText = input.value.trim();
-  const descText = taskDescription.value.trim();
-  if (!taskText) return;
+    const taskText = input.value.trim();
+    const descText = taskDescription.value.trim();
+    const selectedProject = document.getElementById('task-project').value;
+    if (!taskText) return;
 
-  tasks.push({
+    tasks.push({
     text: taskText,
     description: descText || null,
     completed: false,
     dueDate: dateInput.value || new Date().toISOString().split("T")[0],
     priority: priorityInput.value,
-    project: currentProject
-  });
+    project: selectedProject
+    });
 
-  saveTasks();
-  renderTasks();
+    saveTasks();
+    renderTasks();
 
-  // reset fields instantly
-  input.value = '';
-  taskDescription.value = '';
-  dateInput.value = '';
-  priorityInput.value = 'low';
-  addModal.style.display = 'none';
+    // reset fields instantly
+    input.value = '';
+    taskDescription.value = '';
+    dateInput.value = '';
+    priorityInput.value = 'low';
+    addModal.style.display = 'none';
 }
 
 
@@ -321,5 +458,20 @@ function saveProjects() { localStorage.setItem('projects', JSON.stringify(projec
 // ==========================
 // --- INITIAL RENDER ---
 // ==========================
-renderProjects();
-renderTasks();
+(function initView() {
+  // restore view from localStorage if present
+  try {
+    const saved = JSON.parse(localStorage.getItem('currentView'));
+    if (saved && (saved.type === 'project' || saved.type === 'smart')) {
+      currentView = saved;
+    } else {
+      currentView = { type: 'project', value: 'General' };
+    }
+  } catch (e) {
+    currentView = { type: 'project', value: 'General' };
+  }
+
+  renderSmartLists();
+  renderProjects();
+  renderTasks();
+})();

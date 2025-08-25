@@ -349,6 +349,79 @@ button.edit-btn, button.delete-btn {
   transform: scale(1.05);
 }
 
+.project-delete {
+  background: transparent;
+  border: none;
+  color: red;
+  font-weight: bold;
+  cursor: pointer;
+  padding: initial;
+  margin: initial;
+  margin-left: 8px;
+  font-size: 14px;
+}
+
+.project-delete:hover {
+  transform: scale(1.2);
+}
+
+
+
+/* Smart lists look slightly smaller than projects */
+.sidebar h3 {
+  margin-top: 0;
+  font-size: 14px;
+  color: inherit;
+  opacity: 0.9;
+}
+
+#smart-list {
+  padding-left: 0;
+  list-style: none;
+  margin-bottom: 12px;
+}
+
+#smart-list li {
+  margin: 6px 0;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  background: transparent;
+  transition: background 0.18s ease, color 0.18s ease;
+  font-size: 0.95em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Active / hover states. Reuse your theme rules if possible */
+.day-theme #smart-list li:hover,
+.day-theme #smart-list li.active {
+  background: #0077b6;
+  color: white;
+}
+
+.night-theme #smart-list li:hover,
+.night-theme #smart-list li.active {
+  background: #219ebc;
+  color: white;
+}
+
+/* optional small badge for counts (keeps layout neat) */
+.smart-badge {
+  display: inline-block;
+  min-width: 22px;
+  text-align: center;
+  padding: 2px 6px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  color: white;
+  background: rgba(0,0,0,0.4);
+}
+
+
+
+
 /* Task Section */
 .task-check {
   width: 24px;
@@ -448,7 +521,7 @@ button.edit-btn, button.delete-btn {
 }
 
 #add-btn:hover, #openAddModal:hover {
-  background: #00a6a3;
+  background: #3b8400;
 }
 
 .night-theme #openAddModal {
