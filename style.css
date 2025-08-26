@@ -541,7 +541,7 @@ button.edit-btn, button.delete-btn {
     border: 1px solid #ccc;
     border-radius: 6px;
     width: 100%;
-    max-width: 400px;
+    max-width: 50%;
     box-sizing: border-box;
 }
 
