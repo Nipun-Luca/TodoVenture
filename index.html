@@ -6,9 +6,9 @@
     <title>Themed To-Do List</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="day-theme">
+<body>
     <div class="theme-toggle">
-        <button id="toggle-theme">🌙</button>
+        <button id="toggle-theme"></button>
     </div>
 
     <h1>TodoVenture</h1>
@@ -30,8 +30,19 @@
 
         <!-- Task List Section -->
         <div class="task-section">
-            <!-- Add Task Button -->
-            <button id="openAddModal">➕ Add Task</button>
+
+            <div id="task-list-options">
+                <!-- Search / Filter Input -->
+                <input 
+                    type="text" 
+                    id="task-search" 
+                    placeholder="Search tasks..." 
+                    class="task-search"
+                >
+
+                <!-- Add Task Button -->
+                <button id="openAddModal">➕ Add Task</button>
+            </div>
 
             <!-- Add Task Modal -->
             <div id="addModal" class="modal">

@@ -9,13 +9,43 @@ body {
   padding-bottom: 50px;
 }
 
+/* H1 styles */
 h1 {
-  text-align: center;
   margin-top: 40px;
   margin-bottom: 40px;
   position: relative;
   z-index: 10;
+
+  font-family: 'Merriweather', serif;
+  font-size: 2.8rem;
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-align: center;
 }
+
+.day-theme h1 {
+  color: #b85c38;
+
+  display: block;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 5px;
+}
+
+.night-theme h1 {
+  color: #e0e0e0;
+  text-shadow: 
+    0 0 8px rgba(0, 200, 255, 0.6),
+    0 0 16px rgba(0, 200, 255, 0.4);
+  display: block;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 5px;
+}
+
+
 
 input, textarea, button {
   padding: 10px;
@@ -142,25 +172,20 @@ button.edit-btn, button.delete-btn {
 /* --- Night Theme --- */
 .night-theme {
   background: linear-gradient(to bottom, #374d6d, #000a18);
-  color: #eee;
+  color: linen;
 }
 
 .night-theme li {
-  background: rgba(40, 40, 60, 0.9);
-  color: #eee;
-}
-
-.night-theme .sidebar {
-  background: rgba(50, 50, 70, 0.9);
+  background: rgba(60, 80, 110, 0.8);
+  color: linen;
 }
 
 .night-theme .modal-content {
-  background: #2a2a40;
+  background: #37587a;
 }
 
 .night-theme input, .night-theme textarea {
   border: 1px solid #ccc;
-  color: #eee;
 }
 
 .night-theme .edit-btn {
@@ -286,22 +311,28 @@ button.edit-btn, button.delete-btn {
 
 /* Sidebar */
 .sidebar {
-  width: 240px;
-  height: fit-content;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-sizing: border-box; 
-  background: rgba(255, 255, 255, 0.8);
-  color: #333;
-  padding: 20px;
-  border-radius: 8px;
-  margin-left: 20px;
-  flex-shrink: 0;
-  transition: background 0.3s ease, color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    width: 240px;
+    max-height: 90vh;
+    box-sizing: border-box; 
+    background: rgba(255, 255, 255, 0.8);
+    color: #333;
+    padding: 20px;
+    border-radius: 8px;
+    margin-left: 20px;
+    flex-shrink: 0;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
 .sidebar li {
     color: #333;
+    margin: 6px 0;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    background: transparent;
+    transition: background 0.2s ease, color 0.2s ease;
 }
 
 .day-theme .sidebar {
@@ -310,17 +341,12 @@ button.edit-btn, button.delete-btn {
 }
 
 .night-theme .sidebar {
-  background: rgba(255, 255, 255, 0.8);
-  color: #333;
+  background: rgba(50, 50, 70, 0.7);
+  color: white;
 }
 
-.sidebar li {
-  margin: 8px 0;
-  padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  background: transparent;
-  transition: background 0.2s ease, color 0.2s ease;
+.night-theme .sidebar li {
+    color: linen;
 }
 
 .day-theme .sidebar li:hover,
@@ -331,8 +357,12 @@ button.edit-btn, button.delete-btn {
 
 .night-theme .sidebar li:hover,
 .night-theme .sidebar li.active {
-  background: #219ebc;
+  background: brown;
   color: #fff;
+}
+
+#project-list {
+    overflow-y: auto;
 }
 
 /* Projects */
@@ -380,6 +410,10 @@ button.edit-btn, button.delete-btn {
   color: #005f8a;
 }
 
+.night-theme .project-edit {
+    color: #00d6ff;
+}
+
 #add-project-btn:hover {
   background: #5a3c80;
   transform: scale(1.05);
@@ -404,15 +438,19 @@ button.edit-btn, button.delete-btn {
 /* Smart lists look slightly smaller than projects */
 .sidebar h3 {
   margin-top: 0;
-  margin-bottom: 12px;
+  margin-bottom: 5px;
   color: dimgray;
 }
 
+.night-theme h3 {
+    color: linen;
+}
+
 .divider {
-    height: 1px;                /* thickness of the line */
-    background-color: dimgray;      /* color of the line */
-    margin: 20px 0;             /* space above and below */
-    border-radius: 2px;          /* optional: slightly rounded edges */
+    height: 1px;
+    background-color: dimgray;
+    margin: 20px 0;
+    border-radius: 2px;
 }
 
 #smart-list {
@@ -482,8 +520,31 @@ button.edit-btn, button.delete-btn {
   flex: 1;
   margin-left: 20px;
   padding-right: 20px;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
+
+#task-list-options {
+    display: flex;
+    margin-left: 16px;
+    margin-right: 16px;
+}
+
+#task-list {
+    overflow-y: auto;
+    margin-bottom: 0px;
+}
+
+.task-search {
+    padding: 8px 12px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+}
+
 
 .task-item {
   display: flex;
@@ -503,7 +564,7 @@ button.edit-btn, button.delete-btn {
 
 .night-theme .task-item:hover {
   transform: scale(1.02);
-  background: rgba(70, 70, 90, 0.9);
+  background: rgba(90, 110, 140, 0.8);
 }
 
 .task-left {
