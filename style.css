@@ -475,7 +475,7 @@ button.edit-btn, button.delete-btn {
 /* Active / hover states. Reuse your theme rules if possible */
 .day-theme #smart-list li:hover,
 .day-theme #smart-list li.active {
-  background: #0077b6;
+  background: #ff7f50;
   color: white;
 }
 
@@ -604,7 +604,7 @@ button.edit-btn, button.delete-btn {
 
 /* Buttons */
 #openAddModal {
-  background: #4aa600;
+  background: #ff7f50;
   font-weight: bold;
   color: white;
   cursor: pointer;
@@ -619,15 +619,15 @@ button.edit-btn, button.delete-btn {
 }
 
 #add-btn:hover, #openAddModal:hover {
-  background: #3b8400;
+  background: #e76b3c;
 }
 
 .night-theme #openAddModal {
-  background: #fb8500;
+  background: #219ebc;
 }
 
 .night-theme #openAddModal:hover {
-  background: #ff6700;
+  background: #1a759f;
 }
 
 /* Modals */
