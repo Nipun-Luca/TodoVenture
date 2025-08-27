@@ -1,4 +1,6 @@
-/* General Reset */
+/* =========================
+   SHARED CSS (applies to all themes)
+   ========================= */
 body {
   margin: 0;
   font-family: 'Arial', sans-serif;
@@ -9,43 +11,18 @@ body {
   padding-bottom: 50px;
 }
 
-/* H1 styles */
 h1 {
   margin-top: 40px;
   margin-bottom: 40px;
+  padding-bottom: 5px;
   position: relative;
   z-index: 10;
-
   font-family: 'Merriweather', serif;
   font-size: 2.8rem;
   font-weight: 900;
   letter-spacing: 3px;
   text-align: center;
 }
-
-.day-theme h1 {
-  color: #b85c38;
-
-  display: block;
-  width: fit-content;
-  margin-left: auto;
-  margin-right: auto;
-  padding-bottom: 5px;
-}
-
-.night-theme h1 {
-  color: #e0e0e0;
-  text-shadow: 
-    0 0 8px rgba(0, 200, 255, 0.6),
-    0 0 16px rgba(0, 200, 255, 0.4);
-  display: block;
-  width: fit-content;
-  margin-left: auto;
-  margin-right: auto;
-  padding-bottom: 5px;
-}
-
-
 
 input, textarea, button {
   padding: 10px;
@@ -86,7 +63,6 @@ button.edit-btn, button.delete-btn {
   cursor: pointer;
   z-index: 10;
   border: none;
-  background: none;
 }
 
 .edit-btn, .delete-btn {
@@ -97,114 +73,7 @@ button.edit-btn, button.delete-btn {
   transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* Theme Toggle */
-.theme-toggle {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  z-index: 11;
-}
-
-.theme-toggle button {
-  font-size: 20px;          
-  width: 40px;               
-  height: 40px;              
-  border-radius: 50%;        
-  cursor: pointer;
-  border: none;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.8);
-  transition: transform 0.2s ease, background 0.2s ease;
-}
-
-.theme-toggle button:hover {
-  transform: scale(1.15);     
-  background: rgba(255, 255, 255, 1);
-}
-
-.theme-toggle button:focus {
-  outline: none; 
-  box-shadow: 0 0 0 3px rgba(255, 200, 0, 0.5); 
-}
-
-/* --- Day Theme --- */
-.day-theme {
-  background: linear-gradient(to bottom, #ff9a3c, #f9e063);
-  color: #333;
-}
-
-.day-theme li {
-  background: rgba(255, 255, 255, 0.8);
-}
-
-.day-theme .sidebar {
-  background: rgba(255, 255, 255, 0.85);
-}
-
-.day-theme .modal-content {
-  background: #fff;
-}
-
-.day-theme input, .day-theme textarea {
-  border: 1px solid black;
-  color: #000;
-}
-
-.day-theme .edit-btn {
-  background: #2196f3;
-  color: white;
-}
-.day-theme .edit-btn:hover {
-  background: #1976d2;
-}
-
-.day-theme .delete-btn {
-  background: #e53935;
-  color: white;
-}
-.day-theme .delete-btn:hover {
-  background: #c62828;
-}
-
-/* --- Night Theme --- */
-.night-theme {
-  background: linear-gradient(to bottom, #374d6d, #000a18);
-  color: linen;
-}
-
-.night-theme li {
-  background: rgba(60, 80, 110, 0.8);
-  color: linen;
-}
-
-.night-theme .modal-content {
-  background: #37587a;
-}
-
-.night-theme input, .night-theme textarea {
-  border: 1px solid #ccc;
-}
-
-.night-theme .edit-btn {
-  background: #4dabf5;
-  color: #fff;
-}
-.night-theme .edit-btn:hover {
-  background: #1e88e5;
-}
-
-.night-theme .delete-btn {
-  background: #ef5350;
-  color: #fff;
-}
-.night-theme .delete-btn:hover {
-  background: #e53935;
-}
-
-/* Sky elements */
+/* Sky elements (shared) */
 .sky {
   position: absolute;
   top: 0; left: 0;
@@ -242,7 +111,6 @@ button.edit-btn, button.delete-btn {
   animation: float 60s linear infinite;
   z-index: 0;
 }
-
 .cloud::before {
   content: '';
   width: 35px;
@@ -253,7 +121,6 @@ button.edit-btn, button.delete-btn {
   top: 10px;
   border-radius: 50%;
 }
-
 .cloud::after {
   content: '';
   width: 20px;
@@ -264,19 +131,15 @@ button.edit-btn, button.delete-btn {
   top: 17px;
   border-radius: 50%;
 }
-
 .cloud1 { width: 120px; height: 50px; top: 120px; left: -150px; animation-delay: -5s; }
 .cloud2 { width: 150px; height: 60px; top: 180px; left: -200px; animation-delay: -20s; }
 .cloud3 { width: 100px; height: 40px; top: 140px; left: -180px; animation-delay: -35s; }
 .cloud4 { width: 130px; height: 50px; top: 220px; left: -220px; animation-delay: -50s; }
 
-
 @keyframes float {
   0% { transform: translateX(0); }
   100% { transform: translateX(120vw); }
 }
-
-.night-theme .cloud { display: none; }
 
 .star {
   position: absolute;
@@ -295,11 +158,6 @@ button.edit-btn, button.delete-btn {
   100% { opacity: 0.2; transform: scale(1); }
 }
 
-.day-theme .sun { opacity: 1; }
-.day-theme .moon { opacity: 0; }
-.night-theme .sun { opacity: 0; }
-.night-theme .moon { opacity: 1; }
-
 /* Container */
 .main-container {
   display: flex;
@@ -314,7 +172,8 @@ button.edit-btn, button.delete-btn {
     display: flex;
     flex-direction: column;
     width: 240px;
-    max-height: 90vh;
+    height: fit-content;
+    max-height: 87vh;
     box-sizing: border-box; 
     background: rgba(255, 255, 255, 0.8);
     color: #333;
@@ -331,34 +190,7 @@ button.edit-btn, button.delete-btn {
     padding: 6px 10px;
     border-radius: 6px;
     cursor: pointer;
-    background: transparent;
     transition: background 0.2s ease, color 0.2s ease;
-}
-
-.day-theme .sidebar {
-  background: rgba(255, 255, 255, 0.8);
-  color: #333;
-}
-
-.night-theme .sidebar {
-  background: rgba(50, 50, 70, 0.7);
-  color: white;
-}
-
-.night-theme .sidebar li {
-    color: linen;
-}
-
-.day-theme .sidebar li:hover,
-.day-theme .sidebar li.active {
-  background: #70c52b;
-  color: white;
-}
-
-.night-theme .sidebar li:hover,
-.night-theme .sidebar li.active {
-  background: brown;
-  color: #fff;
 }
 
 #project-list {
@@ -410,10 +242,6 @@ button.edit-btn, button.delete-btn {
   color: #005f8a;
 }
 
-.night-theme .project-edit {
-    color: #00d6ff;
-}
-
 #add-project-btn:hover {
   background: #5a3c80;
   transform: scale(1.05);
@@ -435,15 +263,9 @@ button.edit-btn, button.delete-btn {
   transform: scale(1.2);
 }
 
-/* Smart lists look slightly smaller than projects */
 .sidebar h3 {
   margin-top: 0;
   margin-bottom: 5px;
-  color: dimgray;
-}
-
-.night-theme h3 {
-    color: linen;
 }
 
 .divider {
@@ -472,20 +294,6 @@ button.edit-btn, button.delete-btn {
   align-items: center;
 }
 
-/* Active / hover states. Reuse your theme rules if possible */
-.day-theme #smart-list li:hover,
-.day-theme #smart-list li.active {
-  background: #ff7f50;
-  color: white;
-}
-
-.night-theme #smart-list li:hover,
-.night-theme #smart-list li.active {
-  background: #219ebc;
-  color: white;
-}
-
-/* optional small badge for counts (keeps layout neat) */
 .smart-badge {
   display: inline-block;
   min-width: 22px;
@@ -505,10 +313,6 @@ button.edit-btn, button.delete-btn {
   accent-color: #28a745;
   margin-right: 12px;
   flex-shrink: 0;
-}
-
-.night-theme .task-checkbox {
-  accent-color: #90ee90;
 }
 
 .task-checkbox:hover {
@@ -544,7 +348,6 @@ button.edit-btn, button.delete-btn {
     max-width: 50%;
     box-sizing: border-box;
 }
-
 
 .task-item {
   display: flex;
@@ -604,14 +407,13 @@ button.edit-btn, button.delete-btn {
 
 /* Buttons */
 #openAddModal {
-  background: #ff7f50;
-  font-weight: bold;
-  color: white;
-  cursor: pointer;
-  border-radius: 6px;
-  padding: 8px 14px;
-    margin-left: 20px;
-  border: none;
+    background: #ff7f50;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    border-radius: 6px;
+    padding: 8px 14px;
+    border: none;
 }
 
 #add-btn {
@@ -622,15 +424,6 @@ button.edit-btn, button.delete-btn {
   background: #e76b3c;
 }
 
-.night-theme #openAddModal {
-  background: #219ebc;
-}
-
-.night-theme #openAddModal:hover {
-  background: #1a759f;
-}
-
-/* Modals */
 .modal {
   display: none;
   position: fixed;
@@ -650,13 +443,11 @@ button.edit-btn, button.delete-btn {
   max-width: 35%;
   position: relative;
   z-index: 21;
-
-  /* Start off-screen for animation */
   transform: translateX(-1500px) scale(1);
   animation-fill-mode: forwards;
 }
 
-/* --- Keyframes --- */
+/* --- Modal Keyframes --- */
 @keyframes slideInLeft {
   0% {
     transform: translateX(-1500px) scale(0.9);
@@ -703,7 +494,7 @@ button.edit-btn, button.delete-btn {
   }
 }
 
-/* Shared inputs */
+/* Modal inputs */
 .modal-input,
 .modal-textarea {
   width: 80%;
@@ -749,4 +540,472 @@ button.edit-btn, button.delete-btn {
 .modal-buttons button#cancel-edit:hover {
   background: #636e72;
   color: #fff;
+}
+
+.theme-selector {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  z-index: 11;
+}
+
+#themeDropdown {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* =========================
+   THEME-BASED CSS
+   ========================= */
+
+/* --- DAY THEME --- */
+.day-theme {
+  background: linear-gradient(to bottom, #ff9a3c, #f9e063);
+  color: #333;
+}
+.day-theme h1 {
+  color: #b85c38;
+  display: block;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+li {
+  background: rgba(255, 255, 255, 0.8);
+}
+.day-theme .sidebar {
+  background: rgb(255 219 193 / 80%);
+  color: #333;
+}
+.day-theme .sidebar li:hover,
+.day-theme .sidebar li.active {
+  background: #ff7f50;
+  color: white;
+}
+.day-theme #smart-list li:hover,
+.day-theme #smart-list li.active {
+  background: #ff7f50;
+  color: white;
+}
+.day-theme .modal-content {
+    background: #fff0e6;
+}
+input, textarea {
+  border: 1px solid black;
+  color: #000;
+}
+.edit-btn {
+  background: #2196f3;
+  color: white;
+}
+.edit-btn:hover {
+  background: #1976d2;
+}
+.delete-btn {
+  background: #ef5350;
+  color: white;
+}
+.delete-btn:hover {
+  background: #e53935;
+}
+.day-theme .sun { opacity: 1; }
+.day-theme .moon { opacity: 0; }
+
+/* --- NIGHT THEME --- */
+.night-theme {
+  background: linear-gradient(to bottom, #374d6d, #000a18);
+  color: linen;
+}
+.night-theme h1 {
+  color: #e0e0e0;
+  text-shadow: 0 0 8px #00c8ff99, 0 0 16px #00c8ff66;
+  display: block;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+.night-theme li {
+  background: rgba(60, 80, 110, 0.8);
+  color: linen;
+}
+.night-theme .sidebar {
+  background: rgba(50, 50, 70, 0.7);
+  color: #fff;
+}
+.night-theme .sidebar li {
+    color: linen;
+}
+.night-theme .sidebar li:hover,
+.night-theme .sidebar li.active {
+  background: #219ebc;
+  color: #fff;
+}
+.night-theme #smart-list li:hover,
+.night-theme #smart-list li.active {
+  background: #219ebc;
+  color: #fff;
+}
+.night-theme .modal-content {
+  background: #37587a;
+}
+.night-theme input, .night-theme textarea {
+  border: 1px solid #ccc;
+}
+.night-theme .edit-btn {
+  background: #4dabf5;
+  color: #fff;
+}
+.night-theme .edit-btn:hover {
+  background: #1e88e5;
+}
+.night-theme .delete-btn {
+  background: #ef5350;
+  color: #fff;
+}
+.night-theme .delete-btn:hover {
+  background: #e53935;
+}
+.night-theme .cloud { display: none; }
+.night-theme .sun { opacity: 0; }
+.night-theme .moon { opacity: 1; }
+.night-theme h3 {
+    color: linen;
+}
+.night-theme .task-checkbox {
+  accent-color: #90ee90;
+}
+.night-theme #openAddModal {
+  background: #219ebc;
+  color: #fff;
+}
+.night-theme #openAddModal:hover {
+  background: #1a759f;
+}
+
+/* =========================
+   RAIN THEME
+   ========================= */
+.rain-theme {
+  background: linear-gradient(to bottom, #4a6fa5, #1c2b3a);
+}
+
+/* Hide sun/moon */
+.rain-theme .sun { opacity: 0; }
+.rain-theme .moon { opacity: 0; }
+.rain-theme .cloud { display: none; }
+
+.night-theme .sidebar {
+  background: rgba(50, 50, 70, 0.7);
+  color: #fff;
+}
+.rain-theme.lightning {
+  animation: lightning 5s infinite;
+}
+
+.raindrop {
+  position: absolute;
+  width: 2px;
+  height: 15px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  animation: rainFall linear infinite;
+  z-index: 0;
+}
+
+@keyframes rainFall {
+  0% { transform: translateY(0); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+/*optional: lighting effects*/
+@keyframes lightning {
+  0%, 95%, 100% { background: transparent; }
+  96% { background: rgba(255,255,255,0.5); }
+  97% { background: rgba(255,255,255,0.8); }
+  98% { background: rgba(255,255,255,0.3); }
+}
+.rain-theme.lightning {
+  animation: lightning 5s infinite;
+}
+
+.rain-theme li {
+    background-color: rgb(95 136 183 / 80%);
+    color: white;
+}
+
+.rain-theme .sidebar {
+    background-color: rgb(23 44 79 / 80%);
+    color: white;
+}
+
+/* --- SNOW THEME --- */
+.snow-theme {
+  background: linear-gradient(to bottom, #a0c4ff, #e0f7fa);
+}
+
+/* Hide sun/moon */
+.snow-theme .sun { opacity: 0; }
+.snow-theme .moon { opacity: 0; }
+.snow-theme .cloud { display: none; }
+.snow-theme li {
+    background: rgb(243 248 255 / 80%);
+    color: #3a506b;
+}
+
+.snowflake-wrap {
+  position: absolute;
+  top: -10vh;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  transform: translateY(0);
+  animation-name: fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.snowflake {
+  display: inline-block;
+  color: white;
+  opacity: 0.9;
+  will-change: transform, opacity;
+  transform: translateX(0) rotate(0deg);
+  animation-name: drift;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+@keyframes fall {
+  0%   { transform: translateY(0); opacity: 0; }
+  10%  { opacity: 1; }
+  100% { transform: translateY(120vh); opacity: 0.9; }
+}
+@keyframes drift {
+  0%   { transform: translateX(0) rotate(0deg); }
+  25%  { transform: translateX(10px) rotate(10deg); }
+  50%  { transform: translateX(0) rotate(0deg); }
+  75%  { transform: translateX(-10px) rotate(-8deg); }
+  100% { transform: translateX(0) rotate(0deg); }
+}
+
+/* --- SNOW THEME (unique elements) --- */
+.snow-theme h1 {
+  color: #3a506b;
+  text-shadow: 0 2px 8px #e0f7fa, 0 0 12px #a0c4ff99;
+  display: block;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+.snow-theme .sidebar {
+  background: rgb(101 167 213 / 80%);
+  color: #3a506b;
+}
+.snow-theme .sidebar li.active,
+.snow-theme .sidebar li:hover {
+  background: #a0c4ff;
+  color: #1c2b3a;
+}
+.snow-theme #smart-list li.active,
+.snow-theme #smart-list li:hover {
+  background: #a0c4ff;
+  color: #1c2b3a;
+}
+.snow-theme .task-item {
+  background: rgb(243 248 255 / 80%);
+  color: #3a506b;
+}
+.snow-theme .task-item:hover {
+  background: rgb(174, 197, 234);
+}
+.snow-theme #add-project-btn {
+  background: #3a506b;
+  color: #fff;
+}
+.snow-theme #add-project-btn:hover {
+  background: #5bc0eb;
+}
+
+/* --- SAKURA THEME --- */
+.sakura-theme {
+  background: linear-gradient(to bottom, #ffd6e8, #ffeaf4, #fff);
+}
+.sakura-theme .sun,
+.sakura-theme .moon,
+.sakura-theme .cloud {
+  display: none;
+}
+.petal-wrap {
+  position: absolute;
+  top: -10vh;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  animation-name: petalFall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  transform: translateY(0);
+}
+
+/* Inspired by: https://codepen.io/nicecue/pen/gOpppqE */
+/* Base petal sprite */
+.petal {
+  background: url("http://talktofill.surge.sh/cherry-blossom.png") no-repeat;
+  background-size: auto;
+  opacity: 0.9;
+  will-change: transform, opacity;
+  animation-name: petalDrift;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+/* Sprite slices */
+.petal-style1 { width: 40px; height: 18px; background-position: -31px 0; }
+.petal-style2 { width: 38px; height: 20px; background-position: 0 -23px; }
+.petal-style3 { width: 34px; height: 22px; background-position: 0 -50px; }
+.petal-style4 { width: 24px; height: 30px; background-position: -49px -35px; }
+
+/* Falling path with smooth opacity fade */
+@keyframes petalFall {
+  0%   { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+  10%  { opacity: 0.9; }
+  90%  { opacity: 0.9; }
+  100% { transform: translateY(100vh) translateX(30vw) rotate(360deg); opacity: 0; }
+}
+
+/* Flutter & drift */
+@keyframes petalDrift {
+  0%   { transform: translateX(0) rotate(0deg); }
+  25%  { transform: translateX(15px) rotate(20deg); }
+  50%  { transform: translateX(0) rotate(0deg); }
+  75%  { transform: translateX(-15px) rotate(-20deg); }
+  100% { transform: translateX(0) rotate(0deg); }
+}
+
+/* --- SAKURA THEME (unique elements) --- */
+.sakura-theme h1 {
+  color: #e75480;
+  text-shadow: 0 2px 8px #ffeaf4, 0 0 12px #ffd6e8;
+  display: block;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+.sakura-theme .sidebar {
+  background: rgb(255 196 224 / 80%);
+  color: #b85c8a;
+}
+.sakura-theme .sidebar li.active,
+.sakura-theme .sidebar li:hover {
+  background: #e75480;
+  color: #fff;
+}
+.sakura-theme #smart-list li.active,
+.sakura-theme #smart-list li:hover {
+  background: #e75480;
+  color: #fff;
+}
+.sakura-theme .task-item {
+  background: rgba(255, 246, 252, 0.80);
+  color: #b7487f;
+}
+.sakura-theme .task-item:hover {
+  background: #ffd6e8;
+}
+.sakura-theme #add-project-btn {
+  background: #e75480;
+  color: #fff;
+}
+.sakura-theme #add-project-btn:hover {
+  background: #b85c8a;
+}
+
+/* --- NIGHT THEME (custom openAddModal & modal) --- */
+.night-theme #openAddModal {
+  background: #219ebc;
+  color: #fff;
+}
+.night-theme #openAddModal:hover {
+  background: #1a759f;
+}
+.night-theme .modal-content {
+  background: #37587a;
+}
+
+/* --- SNOW THEME (custom openAddModal & modal) --- */
+.snow-theme #openAddModal {
+  background: #3a506b;
+  color: #fff;
+}
+.snow-theme #openAddModal:hover {
+  background: #5bc0eb;
+}
+.snow-theme .modal-content {
+  background: #e0f7fa;
+}
+
+/* --- SAKURA THEME (custom openAddModal & modal) --- */
+.sakura-theme #openAddModal {
+  background: #e75480;
+  color: #fff;
+}
+.sakura-theme #openAddModal:hover {
+  background: #b85c8a;
+}
+.sakura-theme .modal-content {
+  background: #ffeaf4;
+}
+
+/* --- RAIN THEME (full custom) --- */
+.rain-theme h1 {
+  color: #e3f6fd;
+  text-shadow: 0 2px 8px #1c2b3a, 0 0 12px #4a6fa5;
+  display: block;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+.rain-theme .sidebar li.active,
+.rain-theme .sidebar li:hover {
+  background: #5bc0eb;
+  color: #1c2b3a;
+}
+.rain-theme #smart-list li.active,
+.rain-theme #smart-list li:hover {
+  background: #5bc0eb;
+  color: #1c2b3a;
+}
+.rain-theme .task-item {
+  background: rgba(95, 136, 183, 0.85);
+  color: #e3f6fd;
+}
+.rain-theme .task-item:hover {
+  background: #5bc0eb;
+  color: #1c2b3a;
+}
+.rain-theme .smart-badge {
+  background: #1c2b3a;
+  color: #e3f6fd;
+}
+.rain-theme #add-project-btn {
+  background: #1c2b3a;
+  color: #e3f6fd;
+}
+.rain-theme #add-project-btn:hover {
+  background: #5bc0eb;
+  color: #1c2b3a;
+}
+.rain-theme #openAddModal {
+  background: #2c455f;
+  color: #e3f6fd;
+}
+.rain-theme #openAddModal:hover {
+  background: #5bc0eb;
+  color: #1c2b3a;
+}
+.rain-theme .modal-content {
+  background: #4a6fa5;
+  color: #e3f6fd;
 }

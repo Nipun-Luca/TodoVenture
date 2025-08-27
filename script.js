@@ -1,6 +1,5 @@
 // --- DOM Elements ---
 const taskList = document.getElementById('task-list');
-const toggleThemeBtn = document.getElementById('toggle-theme');
 
 const addModal = document.getElementById('addModal');
 const openAddModalBtn = document.getElementById('openAddModal');
@@ -666,28 +665,125 @@ function createStars(count = 50) {
   }
 }
 
-// --- Load saved theme on refresh ---
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme === 'night') {
-  document.body.classList.add('night-theme');
-  toggleThemeBtn.innerHTML = sunSVG;
-} else {
-  document.body.classList.add('day-theme');
-  toggleThemeBtn.innerHTML = moonSVG;
+function createRaindrops(count = 60) {
+  const sky = document.querySelector('.sky');
+  document.querySelectorAll('.raindrop').forEach(r => r.remove());
+  if (!document.body.classList.contains('rain-theme')) return;
+
+  for (let i = 0; i < count; i++) {
+    const drop = document.createElement('div');
+    drop.className = 'raindrop';
+    drop.style.left = `${Math.random() * 100}%`;
+    drop.style.top = `${Math.random() * -100}%`; // start above screen
+    drop.style.animationDuration = `${Math.random() * 0.5 + 0.75}s`; // varied speed
+    sky.appendChild(drop);
+  }
 }
-createStars();
 
-// --- Theme toggle ---
-toggleThemeBtn.addEventListener('click', () => {
-  document.body.classList.toggle('day-theme');
-  document.body.classList.toggle('night-theme');
+function createSnowflakes(count = 50) {
+  const sky = document.querySelector('.sky');
+  document.querySelectorAll('.snowflake-wrap').forEach(s => s.remove());
+  if (!document.body.classList.contains('snow-theme')) return;
 
-  const isNight = document.body.classList.contains('night-theme');
-  toggleThemeBtn.innerHTML = isNight ? sunSVG : moonSVG;
+  for (let i = 0; i < count; i++) {
+    const wrap = document.createElement('div');
+    wrap.className = 'snowflake-wrap';
 
-  localStorage.setItem('theme', isNight ? 'night' : 'day');
+    const flake = document.createElement('div');
+    flake.className = 'snowflake';
+    flake.textContent = '❄';
 
+    // randomize layout + timing
+    const left = Math.random() * 100; // vw
+    const size = Math.random() * 10 + 8; // px
+    const fallDuration = Math.random() * 6 + 6; // 6 - 12s
+    const driftDuration = Math.random() * 4 + 3; // 3 - 7s
+    const delay = Math.random() * 5; // stagger only first run
+
+    wrap.style.left = `${left}vw`;
+    wrap.style.animationDuration = `${fallDuration}s`;
+    wrap.style.animationDelay = `${delay}s`;
+
+    flake.style.fontSize = `${size}px`;
+    flake.style.animationDuration = `${driftDuration}s`;
+    flake.style.animationDelay = `${delay}s`;
+
+    // After the first loop, remove the delay so it falls continuously
+    wrap.addEventListener('animationiteration', () => {
+      wrap.style.animationDelay = '0s';
+      flake.style.animationDelay = '0s';
+    }, { once: true });
+
+    wrap.appendChild(flake);
+    sky.appendChild(wrap);
+  }
+}
+
+function createPetals(count = 15) {
+  const sky = document.querySelector('.sky');
+  document.querySelectorAll('.petal-wrap').forEach(p => p.remove());
+  if (!document.body.classList.contains('sakura-theme')) return;
+
+  for (let i = 0; i < count; i++) {
+    const wrap = document.createElement('div');
+    wrap.className = 'petal-wrap';
+
+    const petal = document.createElement('div');
+    petal.className = 'petal';
+
+    // random style
+    const styleIndex = Math.floor(Math.random() * 4) + 1;
+    petal.classList.add(`petal-style${styleIndex}`);
+
+    // randomize layout + timing
+    const left = Math.random() * 100; // vw
+    const fallDuration = Math.random() * 6 + 8; // 8 - 14s
+    const driftDuration = Math.random() * 4 + 4; // 4 - 8s
+
+    // negative delays to start petals mid-animation smoothly
+    const wrapDelay = -Math.random() * fallDuration;
+    const petalDelay = -Math.random() * driftDuration;
+
+    wrap.style.left = `${left}vw`;
+    wrap.style.animationDuration = `${fallDuration}s`;
+    wrap.style.animationDelay = `${wrapDelay}s`;
+
+    petal.style.animationDuration = `${driftDuration}s`;
+    petal.style.animationDelay = `${petalDelay}s`;
+
+    wrap.appendChild(petal);
+    sky.appendChild(wrap);
+  }
+}
+
+
+function applyTheme(theme) {
+  document.body.classList.remove('day-theme', 'night-theme', 'rain-theme', 'snow-theme', 'sakura-theme');
+
+  if (theme === 'day') document.body.classList.add('day-theme');
+  else if (theme === 'night') document.body.classList.add('night-theme');
+  else if (theme === 'rain') document.body.classList.add('rain-theme');
+  else if (theme === 'snow') document.body.classList.add('snow-theme');
+  else if (theme === 'sakura') document.body.classList.add('sakura-theme');
+
+  localStorage.setItem('theme', theme);
+
+  // refresh visuals
   createStars();
+  createRaindrops();
+  createSnowflakes();
+  createPetals();
+}
+
+
+// --- On load ---
+const savedTheme = localStorage.getItem('theme') || 'day';
+applyTheme(savedTheme);
+document.getElementById('themeDropdown').value = savedTheme;
+
+// --- Dropdown listener ---
+document.getElementById('themeDropdown').addEventListener('change', e => {
+  applyTheme(e.target.value);
 });
 
 

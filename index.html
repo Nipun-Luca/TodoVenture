@@ -7,9 +7,16 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="theme-toggle">
-        <button id="toggle-theme"></button>
+    <div class="theme-selector">
+        <select id="themeDropdown">
+            <option value="day">☀️ Day</option>
+            <option value="night">🌙 Night</option>
+            <option value="rain">🌧️ Rain</option>
+            <option value="snow">❄️ Snow</option>
+            <option value="sakura">🌸 Sakura</option> 
+        </select>
     </div>
+
 
     <h1>TodoVenture</h1>
 
@@ -123,6 +130,8 @@
         <div class="cloud cloud2"></div>
         <div class="cloud cloud3"></div>
         <div class="cloud cloud4"></div>
+        <div class="raindrop"></div>
+        <div class="snowflake"></div>
     </div>
 
     <script src="script.js"></script>
