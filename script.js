@@ -757,7 +757,7 @@ function createPetals(count = 15) {
 }
 
 // Grimm theme - fiery particles
-function createGrimmParticles(count = 40) {
+function createGrimmParticles(count = 50) {
   const sky = document.querySelector('.sky');
   document.querySelectorAll('.grimm-wrap').forEach(n => n.remove());
   if (!document.body.classList.contains('grimm-theme')) return;
@@ -771,45 +771,36 @@ function createGrimmParticles(count = 40) {
     const particle = document.createElement('div');
     particle.className = 'grimm-particle';
 
-    // Small, rice-grain shape
-    const length = Math.round(rand(12, 22));   // px (short, like rice)
-    const thickness = Math.round(rand(2, 3));  // px (thin)
+    // mix of dots and streaks
+    const isDot = Math.random() < 0.4;
+    const size = isDot ? rand(3, 6) : rand(2, 3);     // dot diameter or streak thickness
+    const length = isDot ? size : rand(10, 20);       // streak length
+    particle.style.width = `${size}px`;
     particle.style.height = `${length}px`;
-    particle.style.width = `${thickness}px`;
-    particle.style.borderRadius = '8px/50%';
 
-    // Subtle warm color
-    const r = 220 + Math.round(Math.random() * 20); // 220-240
-    const g = 30 + Math.round(Math.random() * 20);  // 30-50
-    const b = 30 + Math.round(Math.random() * 20);  // 30-50
-    particle.style.background = `linear-gradient(90deg, rgba(${r},${g},${b},0.12) 0%, rgba(${r},${g},${b},0.7) 60%, rgba(${r},${g},${b},0.18) 100%)`;
+    // glowing ember style
+    const intensity = rand(0.4, 0.9);
+    particle.style.background = `radial-gradient(circle, rgba(255,100,60,${intensity}) 0%, rgba(200,30,10,0.3) 70%, transparent 100%)`;
+    particle.style.boxShadow = `0 0 ${rand(4, 12)}px rgba(255,80,50,${intensity})`;
+    particle.style.borderRadius = isDot ? "50%" : "999px";
 
-    // Glow
-    particle.style.boxShadow = `0 0 8px 2px rgba(255, 80, 80, 0.45)`;
-    particle.style.opacity = rand(0.7, 0.95).toFixed(2);
+    // position along bottom area
+    const leftVW = rand(0, 100);
+    const topVH  = rand(85, 100); // start near bottom
+    wrap.style.left = `${leftVW}vw`;
+    wrap.style.top  = `${topVH}vh`;
 
-    // Position: bottom, random left (0-95vw)
-    wrap.style.left = `${rand(0, 95)}vw`;
-    wrap.style.bottom = '-8vh';
-    wrap.style.top = '';
+    // slower rise
+    const flowDuration = rand(8, 14);   // slower movement
+    const oscDuration  = rand(2, 4);
+    const wrapDelay    = -Math.random() * flowDuration;
+    const oscDelay     = -Math.random() * oscDuration;
 
-    // Animation: float up, drift right, oscillate
-    const upDuration = rand(6, 10); // seconds (slower)
-    const oscDuration = rand(1.5, 2.5); // seconds (slower oscillation)
-    const wrapDelay = -Math.random() * upDuration;
-    const particleDelay = -Math.random() * oscDuration;
-    wrap.style.animation = `grimmFlow ${upDuration}s linear infinite`;
-    wrap.style.animationDelay = `${wrapDelay}s`;
-    particle.style.animation = `grimmOscillate ${oscDuration}s ease-in-out infinite`;
-    particle.style.animationDelay = `${particleDelay}s`;
+    wrap.style.animationDuration = `${flowDuration}s`;
+    wrap.style.animationDelay    = `${wrapDelay}s`;
 
-    // On animation iteration, randomize position and duration for natural effect
-    wrap.addEventListener('animationiteration', () => {
-      wrap.style.left = `${rand(0, 95)}vw`;
-      const newUpDuration = rand(6, 10);
-      wrap.style.animationDuration = `${newUpDuration}s`;
-      wrap.style.animationDelay = `${-Math.random() * newUpDuration}s`;
-    });
+    particle.style.animationDuration = `${oscDuration}s`;
+    particle.style.animationDelay    = `${oscDelay}s`;
 
     wrap.appendChild(particle);
     sky.appendChild(wrap);

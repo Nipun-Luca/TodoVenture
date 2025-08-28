@@ -1095,41 +1095,44 @@ input, textarea {
 }
 
 /* --- GRIMM THEME PARTICLE ANIMATION (ember style) --- */
-@keyframes grimmFlow {
-  0%   { transform: translateX(0) translateY(0) rotate(0deg); opacity: 0; }
-  6%   { opacity: 0.85; }
-  88%  { opacity: 0.85; }
-  100% { transform: translateX(10vw) translateY(-110vh) rotate(14deg); opacity: 0; }
-}
-@keyframes grimmOscillate {
-  0%   { transform: translateX(0) rotate(-8deg); }
-  20%  { transform: translateX(6px) rotate(8deg); }
-  50%  { transform: translateX(-4px) rotate(-8deg); }
-  80%  { transform: translateX(4px) rotate(8deg); }
-  100% { transform: translateX(0) rotate(-8deg); }
-}
-.grimm-particle {
-  display: block;
-  margin: 0 auto;
-  pointer-events: none;
-  border-radius: 999px;
-  transform-origin: center;
-  will-change: transform, opacity, filter;
-  animation-name: grimmOscillate;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-  /* width/height + background + animation-duration set inline in JS */
-  box-shadow: 0 0 12px 4px #ff3c3c88, 0 0 32px 8px #ffb3b344;
-  filter: blur(1.2px);
-}
 .grimm-wrap {
   position: absolute;
-  left: 0;
+  left: 0; 
+  top: 0;
   pointer-events: none;
   user-select: none;
   z-index: 0;
   will-change: transform, opacity;
-  animation-name: grimmFlow;
+  animation-name: emberRise;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
+}
+
+/* ember particle (dot/streak) */
+.grimm-particle {
+  display: block;
+  margin: 0 auto;
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform, opacity, filter;
+  animation-name: emberOscillate;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+/* upward drift with slight right motion */
+@keyframes emberRise {
+  0%   { transform: translateX(0) translateY(0); opacity: 0; }
+  5%   { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateX(20vw) translateY(-110vh); opacity: 0; }
+}
+
+/* side-to-side oscillation / shimmer */
+@keyframes emberOscillate {
+  0%   { transform: translateX(0) scale(1) rotate(0deg); }
+  25%  { transform: translateX(3px) scale(1.1) rotate(5deg); }
+  50%  { transform: translateX(0) scale(0.9) rotate(-3deg); }
+  75%  { transform: translateX(-3px) scale(1.05) rotate(2deg); }
+  100% { transform: translateX(0) scale(1) rotate(0deg); }
 }
