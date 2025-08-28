@@ -751,13 +751,6 @@ function createPetals(count = 15) {
     petal.style.animationDuration = `${driftDuration}s`;
     petal.style.animationDelay = `${petalDelay}s`;
 
-    // On animation iteration, randomize position for continuous flow
-    wrap.addEventListener('animationiteration', () => {
-      wrap.style.left = `${Math.random() * 100}vw`;
-      wrap.style.animationDuration = `${Math.random() * 6 + 8}s`;
-      wrap.style.animationDelay = `${-Math.random() * 6}s`;
-    });
-
     wrap.appendChild(petal);
     sky.appendChild(wrap);
   }

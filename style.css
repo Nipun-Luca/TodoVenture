@@ -1099,7 +1099,7 @@ input, textarea {
   0%   { transform: translateX(0) translateY(0) rotate(0deg); opacity: 0; }
   6%   { opacity: 0.85; }
   88%  { opacity: 0.85; }
-  100% { transform: translateX(10vw) translateY(-80vh) rotate(14deg); opacity: 0; }
+  100% { transform: translateX(10vw) translateY(-110vh) rotate(14deg); opacity: 0; }
 }
 @keyframes grimmOscillate {
   0%   { transform: translateX(0) rotate(-8deg); }
