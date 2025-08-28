@@ -185,7 +185,6 @@ button.edit-btn, button.delete-btn {
 }
 
 .sidebar li {
-    color: #333;
     margin: 6px 0;
     padding: 6px 10px;
     border-radius: 6px;
@@ -1008,4 +1007,129 @@ input, textarea {
 .rain-theme .modal-content {
   background: #4a6fa5;
   color: #e3f6fd;
+}
+
+/* --- GRIMM THEME (full custom) --- */
+.grimm-theme {
+  /* Radial + linear for deep ember effect */
+  background: radial-gradient(ellipse at 50% 80%, #ff3c3c33 0%, #6e2637 40%, #1a0000 80%, #000 100%),
+              linear-gradient(to bottom, #000 0%, #2a0000 60%, #6e2637 100%);
+  color: #ffdede;
+}
+.grimm-theme .sun,
+.grimm-theme .moon,
+.grimm-theme .cloud {
+  display: none;
+}
+.grimm-theme h1 {
+  color: white;
+  text-shadow: 0 0 16px #ff3c3c, 0 0 32px #ffb3b3, 0 2px 8px #2a0000;
+  letter-spacing: 4px;
+  font-family: 'Merriweather', serif;
+  font-weight: 900;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+.grimm-theme .sidebar {
+  background: rgba(40, 10, 20, 0.92);
+  color: #ffb3b3;
+}
+.grimm-theme .sidebar li.active,
+.grimm-theme .sidebar li:hover {
+  background: #ff3c3c;
+  color: #fff;
+}
+.grimm-theme #smart-list li.active,
+.grimm-theme #smart-list li:hover {
+  background: #ff3c3c;
+  color: #fff;
+}
+.grimm-theme .task-item {
+  background: rgba(60, 20, 30, 0.85);
+  color: #ffdede;
+  box-shadow: 0 2px 12px 0 #2a000055;
+}
+.grimm-theme .task-item:hover {
+  background: #6e2637;
+  color: #fff0f0;
+}
+.grimm-theme #add-project-btn {
+  background: #ff3c3c;
+  color: #fff;
+}
+.grimm-theme #add-project-btn:hover {
+  background: #b71c1c;
+  color: #fff;
+}
+.grimm-theme #openAddModal {
+  background: #b71c1c;
+  color: #fff;
+}
+.grimm-theme #openAddModal:hover {
+  background: #ff3c3c;
+  color: #fff;
+}
+.grimm-theme .modal-content {
+  background: #2a0000;
+  color: #ffdede;
+  box-shadow: 0 0 32px 0 #ff3c3c33;
+}
+.grimm-theme input, .grimm-theme textarea, .grimm-theme .modal-select, .grimm-theme .modal-date {
+  border: 1px solid #ff3c3c;
+  background: #1a0000;
+  color: #ffdede;
+}
+.grimm-theme .delete-btn {
+  background: #b71c1c;
+  color: #fff;
+}
+.grimm-theme .delete-btn:hover {
+  background: #ff3c3c;
+}
+.grimm-theme .sidebar h3 {
+  color: #ffb3b3;
+}
+.grimm-theme .sidebar li {
+  background-color: #602936;
+}
+
+/* --- GRIMM THEME PARTICLE ANIMATION (ember style) --- */
+@keyframes grimmFlow {
+  0%   { transform: translateX(0) translateY(0) rotate(0deg); opacity: 0; }
+  6%   { opacity: 0.85; }
+  88%  { opacity: 0.85; }
+  100% { transform: translateX(10vw) translateY(-80vh) rotate(14deg); opacity: 0; }
+}
+@keyframes grimmOscillate {
+  0%   { transform: translateX(0) rotate(-8deg); }
+  20%  { transform: translateX(6px) rotate(8deg); }
+  50%  { transform: translateX(-4px) rotate(-8deg); }
+  80%  { transform: translateX(4px) rotate(8deg); }
+  100% { transform: translateX(0) rotate(-8deg); }
+}
+.grimm-particle {
+  display: block;
+  margin: 0 auto;
+  pointer-events: none;
+  border-radius: 999px;
+  transform-origin: center;
+  will-change: transform, opacity, filter;
+  animation-name: grimmOscillate;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  /* width/height + background + animation-duration set inline in JS */
+  box-shadow: 0 0 12px 4px #ff3c3c88, 0 0 32px 8px #ffb3b344;
+  filter: blur(1.2px);
+}
+.grimm-wrap {
+  position: absolute;
+  left: 0;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  will-change: transform, opacity;
+  animation-name: grimmFlow;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
 }

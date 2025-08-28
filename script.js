@@ -751,20 +751,92 @@ function createPetals(count = 15) {
     petal.style.animationDuration = `${driftDuration}s`;
     petal.style.animationDelay = `${petalDelay}s`;
 
+    // On animation iteration, randomize position for continuous flow
+    wrap.addEventListener('animationiteration', () => {
+      wrap.style.left = `${Math.random() * 100}vw`;
+      wrap.style.animationDuration = `${Math.random() * 6 + 8}s`;
+      wrap.style.animationDelay = `${-Math.random() * 6}s`;
+    });
+
     wrap.appendChild(petal);
     sky.appendChild(wrap);
   }
 }
 
+// Grimm theme - fiery particles
+function createGrimmParticles(count = 40) {
+  const sky = document.querySelector('.sky');
+  document.querySelectorAll('.grimm-wrap').forEach(n => n.remove());
+  if (!document.body.classList.contains('grimm-theme')) return;
+
+  const rand = (min, max) => min + Math.random() * (max - min);
+
+  for (let i = 0; i < count; i++) {
+    const wrap = document.createElement('div');
+    wrap.className = 'grimm-wrap';
+
+    const particle = document.createElement('div');
+    particle.className = 'grimm-particle';
+
+    // Small, rice-grain shape
+    const length = Math.round(rand(12, 22));   // px (short, like rice)
+    const thickness = Math.round(rand(2, 3));  // px (thin)
+    particle.style.height = `${length}px`;
+    particle.style.width = `${thickness}px`;
+    particle.style.borderRadius = '8px/50%';
+
+    // Subtle warm color
+    const r = 220 + Math.round(Math.random() * 20); // 220-240
+    const g = 30 + Math.round(Math.random() * 20);  // 30-50
+    const b = 30 + Math.round(Math.random() * 20);  // 30-50
+    particle.style.background = `linear-gradient(90deg, rgba(${r},${g},${b},0.12) 0%, rgba(${r},${g},${b},0.7) 60%, rgba(${r},${g},${b},0.18) 100%)`;
+
+    // Glow
+    particle.style.boxShadow = `0 0 8px 2px rgba(255, 80, 80, 0.45)`;
+    particle.style.opacity = rand(0.7, 0.95).toFixed(2);
+
+    // Position: bottom, random left (0-95vw)
+    wrap.style.left = `${rand(0, 95)}vw`;
+    wrap.style.bottom = '-8vh';
+    wrap.style.top = '';
+
+    // Animation: float up, drift right, oscillate
+    const upDuration = rand(6, 10); // seconds (slower)
+    const oscDuration = rand(1.5, 2.5); // seconds (slower oscillation)
+    const wrapDelay = -Math.random() * upDuration;
+    const particleDelay = -Math.random() * oscDuration;
+    wrap.style.animation = `grimmFlow ${upDuration}s linear infinite`;
+    wrap.style.animationDelay = `${wrapDelay}s`;
+    particle.style.animation = `grimmOscillate ${oscDuration}s ease-in-out infinite`;
+    particle.style.animationDelay = `${particleDelay}s`;
+
+    // On animation iteration, randomize position and duration for natural effect
+    wrap.addEventListener('animationiteration', () => {
+      wrap.style.left = `${rand(0, 95)}vw`;
+      const newUpDuration = rand(6, 10);
+      wrap.style.animationDuration = `${newUpDuration}s`;
+      wrap.style.animationDelay = `${-Math.random() * newUpDuration}s`;
+    });
+
+    wrap.appendChild(particle);
+    sky.appendChild(wrap);
+  }
+}
+
+function removeGrimmParticles() {
+  document.querySelectorAll('.grimm-wrap').forEach(n => n.remove());
+}
+
 
 function applyTheme(theme) {
-  document.body.classList.remove('day-theme', 'night-theme', 'rain-theme', 'snow-theme', 'sakura-theme');
+  document.body.classList.remove('day-theme', 'night-theme', 'rain-theme', 'snow-theme', 'sakura-theme', 'grimm-theme');
 
   if (theme === 'day') document.body.classList.add('day-theme');
   else if (theme === 'night') document.body.classList.add('night-theme');
   else if (theme === 'rain') document.body.classList.add('rain-theme');
   else if (theme === 'snow') document.body.classList.add('snow-theme');
   else if (theme === 'sakura') document.body.classList.add('sakura-theme');
+  else if (theme === 'grimm') document.body.classList.add('grimm-theme');
 
   localStorage.setItem('theme', theme);
 
@@ -773,6 +845,7 @@ function applyTheme(theme) {
   createRaindrops();
   createSnowflakes();
   createPetals();
+  createGrimmParticles();
 }
 
 
